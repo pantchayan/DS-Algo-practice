@@ -78,7 +78,7 @@ void display(vector<vector<Edge>> &gp)
     cout << endl;
 }
 
-// Traversal -- DFS questions =====================================================================================
+// Traversal -- DFS questions =============================================================================================
 
 bool hasPath(int src, int dest, vector<bool> &vis)
 {
@@ -176,8 +176,72 @@ void allSolution(int src, int dest,vector<bool>& vis, int data, allSolutionsPair
 
 }
 
+// Hamiltonian path ===============================================================================================================
+
+bool hasHamiltonianPath(int src, int curr, string path, vector<bool>& vis , int count){
+    if(count == 1){
+        cout << path << endl;   
+        return true;  
+    }
+
+    vis[curr] = true;
+    bool res;
+    for(Edge e : graph[curr]){
+        if(!vis[e.v]){
+
+            res = res|| hasHamiltonianPath(src,e.v,path + to_string(e.v),vis,count-1);           
+        }
+    }
+
+    vis[curr] = false;
+    return res;
+}
 
 
+int allHamiltonianPaths(int src, int curr, string path, vector<bool>& vis , int count){
+    if(count == 1){
+        cout << path << endl;
+        return 1;
+    }
+
+    int num = 0;
+    vis[curr] = true;
+    for(Edge e : graph[curr]){
+        if(!vis[e.v]){
+            count--;
+            num += allHamiltonianPaths(src,e.v,path + to_string(e.v),vis,count);
+            count++;
+        }
+    }
+    vis[curr] = false;
+    return num;
+}
+
+
+int allHamiltonianCycles(int src, int curr, string path, vector<bool>& vis , int count){
+    if(count == 1){
+        
+        for(Edge e : graph[curr]){
+            if(e.v == src){
+                cout << path + to_string(src) << endl; 
+                return 1;
+            }
+        }
+    }
+    int num = 0;
+    vis[curr] = true;
+    for(Edge e : graph[curr]){
+        if(!vis[e.v]){
+            count--;
+            num += allHamiltonianCycles(src,e.v,path + to_string(e.v),vis,count);
+            count++;
+        }
+    }
+    vis[curr] = false;
+    return num;
+}
+
+// =================================================================================================================================
 void constructGraph()
 {
     // for(int i=0;i<N;i++){
@@ -192,7 +256,7 @@ void constructGraph()
     addEdge(graph, 4, 5, 2);
     addEdge(graph, 4, 6, 3);
     addEdge(graph, 5, 6, 8);
-
+    //addEdge(graph, 2, 5, 10);
     // addEdge(graph, 2, 5, 2);
 
     display(graph);
@@ -202,29 +266,47 @@ void constructGraph()
 void set1()
 {
 
-    vector<bool> vis(N, false);
+    //vector<bool> vis(N, false);
 
     //removeEdge(3, 4);
 
     // bool ans = hasPath(0, 6, vis);
 
-    int ans = allPath(0,6,vis,0,"");
+    // int ans = allPath(0,6,vis,0,"");
 
-    allSolutionsPair pair = allSolutionsPair();
-    allSolution(0,6,vis,30,pair,0,"");
-    cout << endl;
-    cout <<  pair.lightPath + "@" << pair.lightW << endl ; 
-    cout <<  pair.heavyPath + "@" << pair.heavyW <<endl; 
-    cout <<  pair.floorPath + "@" << pair.floor <<endl; 
-    cout <<  pair.ceilPath + "@" << pair.ceil <<endl; 
-    
+    // allSolutionsPair pair = allSolutionsPair();
+    // allSolution(0,6,vis,30,pair,0,"");
+    // cout << endl;
+    // cout <<  pair.lightPath + "@" << pair.lightW << endl ; 
+    // cout <<  pair.heavyPath + "@" << pair.heavyW <<endl; 
+    // cout <<  pair.floorPath + "@" << pair.floor <<endl; 
+    // cout <<  pair.ceilPath + "@" << pair.ceil <<endl; 
+
     //cout << ans << endl;
+}
+
+void set2(){
+
+    // Hamiltonian path 
+    
+    vector<bool> vis(N, false);
+
+    hasHamiltonianPath(2,2,"2",vis,N);
+
+    cout << " =============================== " <<endl;
+    int num = allHamiltonianPaths(2,2,"2",vis,N);
+
+    cout << "Number of Hamilton paths : " << num << endl;
+
+    int num2 = allHamiltonianCycles(2,2,"2",vis,N);
+    cout << "Number of Hamilton cycles : " << num2 << endl;
 }
 
 void solve()
 {
     constructGraph();
-    set1();
+    //set1();
+    set2();
 }
 
 int main()
