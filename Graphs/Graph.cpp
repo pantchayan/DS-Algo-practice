@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <string>
 using namespace std;
 
 class Edge
@@ -77,6 +77,107 @@ void display(vector<vector<Edge>> &gp)
 
     cout << endl;
 }
+
+// Traversal -- DFS questions =====================================================================================
+
+bool hasPath(int src, int dest, vector<bool> &vis)
+{
+    if (src == dest)
+    {
+        return true;
+    }
+
+    bool res = false;
+    // Normal DFS algo
+    //1. mark the current node (src)
+    vis[src] = true;
+    //2. visit all the unmarked neighbours.
+    for (Edge e : graph[src])
+    {
+        if (!vis[e.v])
+        {
+            //3. call for all the un. neighbours
+
+            res = res || hasPath(e.v, dest, vis);
+        }
+    }
+    return res;
+}
+
+
+
+int allPath(int src, int dest, vector<bool> &vis, int weight, string ans)
+{
+    if (src == dest)
+    {
+        cout << ans << src << "@" << weight << endl;
+        return 1;
+    }
+    // DFS ALGO
+    vis[src] = true;
+    int count = 0;
+    for (Edge e : graph[src])
+    {
+        if (!vis[e.v])
+        {
+            count += allPath(e.v, dest, vis, weight + e.w, ans+to_string(src));
+        }
+    }
+    vis[src] = false;
+    return count;
+}
+
+
+class allSolutionsPair{
+    public:
+        int lightW = 1e7;
+        string lightPath = "";
+        int heavyW = 0;
+        string heavyPath = "";
+
+        int ceil = 1e7;
+        string ceilPath = "";
+        int floor = 0;
+        string floorPath = "";
+
+}; 
+
+
+void allSolution(int src, int dest,vector<bool>& vis, int data, allSolutionsPair& pair,int weight,string path){
+    if(src == dest){
+        if(weight < pair.lightW){
+            pair.lightW = weight;
+            pair.lightPath = path+to_string(dest);
+        }
+        if(weight > pair.heavyW){
+            pair.heavyW = weight;
+            pair.heavyPath = path+to_string(dest);
+        }
+        if(weight < data && weight > pair.floor){
+            pair.floor = weight;
+            pair.floorPath = path+to_string(dest);
+        }
+        if(weight > data && weight < pair.ceil){
+            pair.ceil = weight;
+            pair.ceilPath = path+to_string(dest);
+        }
+    }
+
+
+
+    //DFS Algo
+    vis[src] = true;
+    for(Edge e:graph[src]){
+        if(!vis[e.v]){
+            allSolution(e.v, dest,vis,data,pair,weight + e.w, path+to_string(src));
+        }
+    }
+    vis[src] = false;
+
+}
+
+
+
 void constructGraph()
 {
     // for(int i=0;i<N;i++){
@@ -98,12 +199,27 @@ void constructGraph()
     cout << endl;
 }
 
+void set1()
+{
 
-void set1(){
+    vector<bool> vis(N, false);
+
+    //removeEdge(3, 4);
+
+    // bool ans = hasPath(0, 6, vis);
+
+    int ans = allPath(0,6,vis,0,"");
+
+    allSolutionsPair pair = allSolutionsPair();
+    allSolution(0,6,vis,30,pair,0,"");
+    cout << endl;
+    cout <<  pair.lightPath + "@" << pair.lightW << endl ; 
+    cout <<  pair.heavyPath + "@" << pair.heavyW <<endl; 
+    cout <<  pair.floorPath + "@" << pair.floor <<endl; 
+    cout <<  pair.ceilPath + "@" << pair.ceil <<endl; 
     
-
+    //cout << ans << endl;
 }
-
 
 void solve()
 {
