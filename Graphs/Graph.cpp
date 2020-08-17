@@ -15,7 +15,7 @@ public:
     }
 };
 
-int N = 7;
+int N = 17;
 vector<vector<Edge>> graph(N, vector<Edge>());
 // vector<vector<pair<int,int>>> graph(N,vector<pair<int,int>>());
 
@@ -104,8 +104,6 @@ bool hasPath(int src, int dest, vector<bool> &vis)
     return res;
 }
 
-
-
 int allPath(int src, int dest, vector<bool> &vis, int weight, string ans)
 {
     if (src == dest)
@@ -120,76 +118,83 @@ int allPath(int src, int dest, vector<bool> &vis, int weight, string ans)
     {
         if (!vis[e.v])
         {
-            count += allPath(e.v, dest, vis, weight + e.w, ans+to_string(src));
+            count += allPath(e.v, dest, vis, weight + e.w, ans + to_string(src));
         }
     }
     vis[src] = false;
     return count;
 }
 
+class allSolutionsPair
+{
+public:
+    int lightW = 1e7;
+    string lightPath = "";
+    int heavyW = 0;
+    string heavyPath = "";
 
-class allSolutionsPair{
-    public:
-        int lightW = 1e7;
-        string lightPath = "";
-        int heavyW = 0;
-        string heavyPath = "";
+    int ceil = 1e7;
+    string ceilPath = "";
+    int floor = 0;
+    string floorPath = "";
+};
 
-        int ceil = 1e7;
-        string ceilPath = "";
-        int floor = 0;
-        string floorPath = "";
-
-}; 
-
-
-void allSolution(int src, int dest,vector<bool>& vis, int data, allSolutionsPair& pair,int weight,string path){
-    if(src == dest){
-        if(weight < pair.lightW){
+void allSolution(int src, int dest, vector<bool> &vis, int data, allSolutionsPair &pair, int weight, string path)
+{
+    if (src == dest)
+    {
+        if (weight < pair.lightW)
+        {
             pair.lightW = weight;
-            pair.lightPath = path+to_string(dest);
+            pair.lightPath = path + to_string(dest);
         }
-        if(weight > pair.heavyW){
+        if (weight > pair.heavyW)
+        {
             pair.heavyW = weight;
-            pair.heavyPath = path+to_string(dest);
+            pair.heavyPath = path + to_string(dest);
         }
-        if(weight < data && weight > pair.floor){
+        if (weight < data && weight > pair.floor)
+        {
             pair.floor = weight;
-            pair.floorPath = path+to_string(dest);
+            pair.floorPath = path + to_string(dest);
         }
-        if(weight > data && weight < pair.ceil){
+        if (weight > data && weight < pair.ceil)
+        {
             pair.ceil = weight;
-            pair.ceilPath = path+to_string(dest);
+            pair.ceilPath = path + to_string(dest);
         }
     }
-
-
 
     //DFS Algo
     vis[src] = true;
-    for(Edge e:graph[src]){
-        if(!vis[e.v]){
-            allSolution(e.v, dest,vis,data,pair,weight + e.w, path+to_string(src));
+    for (Edge e : graph[src])
+    {
+        if (!vis[e.v])
+        {
+            allSolution(e.v, dest, vis, data, pair, weight + e.w, path + to_string(src));
         }
     }
     vis[src] = false;
-
 }
 
 // Hamiltonian path ===============================================================================================================
 
-bool hasHamiltonianPath(int src, int curr, string path, vector<bool>& vis , int count){
-    if(count == 1){
-        cout << path << endl;   
-        return true;  
+bool hasHamiltonianPath(int src, int curr, string path, vector<bool> &vis, int count)
+{
+    if (count == 1)
+    {
+        cout << path << endl;
+        return true;
     }
 
     vis[curr] = true;
     bool res;
-    for(Edge e : graph[curr]){
-        if(!vis[e.v]){
+    for (Edge e : graph[curr])
+    {
+        if (!vis[e.v])
+        {
 
-            res = res|| hasHamiltonianPath(src,e.v,path + to_string(e.v),vis,count-1);           
+            res = res || hasHamiltonianPath(src, e.v, path + to_string(e.v), vis, count - 1);
         }
     }
 
@@ -197,19 +202,22 @@ bool hasHamiltonianPath(int src, int curr, string path, vector<bool>& vis , int 
     return res;
 }
 
-
-int allHamiltonianPaths(int src, int curr, string path, vector<bool>& vis , int count){
-    if(count == 1){
+int allHamiltonianPaths(int src, int curr, string path, vector<bool> &vis, int count)
+{
+    if (count == 1)
+    {
         cout << path << endl;
         return 1;
     }
 
     int num = 0;
     vis[curr] = true;
-    for(Edge e : graph[curr]){
-        if(!vis[e.v]){
+    for (Edge e : graph[curr])
+    {
+        if (!vis[e.v])
+        {
             count--;
-            num += allHamiltonianPaths(src,e.v,path + to_string(e.v),vis,count);
+            num += allHamiltonianPaths(src, e.v, path + to_string(e.v), vis, count);
             count++;
         }
     }
@@ -217,28 +225,78 @@ int allHamiltonianPaths(int src, int curr, string path, vector<bool>& vis , int 
     return num;
 }
 
+int allHamiltonianCycles(int src, int curr, string path, vector<bool> &vis, int count)
+{
+    if (count == 1)
+    {
 
-int allHamiltonianCycles(int src, int curr, string path, vector<bool>& vis , int count){
-    if(count == 1){
-        
-        for(Edge e : graph[curr]){
-            if(e.v == src){
-                cout << path + to_string(src) << endl; 
+        for (Edge e : graph[curr])
+        {
+            if (e.v == src)
+            {
+                cout << path + to_string(src) << endl;
                 return 1;
             }
         }
     }
     int num = 0;
     vis[curr] = true;
-    for(Edge e : graph[curr]){
-        if(!vis[e.v]){
+    for (Edge e : graph[curr])
+    {
+        if (!vis[e.v])
+        {
             count--;
-            num += allHamiltonianCycles(src,e.v,path + to_string(e.v),vis,count);
+            num += allHamiltonianCycles(src, e.v, path + to_string(e.v), vis, count);
             count++;
         }
     }
     vis[curr] = false;
     return num;
+}
+
+// GCC (distinct components in a graph) ==================================================================================================
+
+int dfsGCC(int src, vector<bool> &vis, vector<bool> &final)
+{
+    if (final[src] == false)
+    {
+        final[src] = true;
+    }
+
+    vis[src] = true;
+    int count = 0;
+    for (Edge e : graph[src])
+    {
+        if (!vis[e.v])
+        {
+            count += dfsGCC(e.v, vis, final);
+        }
+    }
+    //vis[src] = false;
+    return count + 1;
+}
+
+int GCC()
+{
+    vector<bool> final(N, false);
+    vector<bool> vis(N, false);
+    int count = 0;
+    int maxSize = 0;
+    for (int i = 0; i < N; i++)
+    {
+        if (!final[i])
+        {
+            count++;
+            int size = dfsGCC(i, vis, final);
+            if(maxSize < size){
+                maxSize = size;
+            }   
+
+            //maxSize = max(maxSize,size);
+        }
+    }
+    cout <<"Max size of a component : " << maxSize << endl;
+    return count;
 }
 
 // =================================================================================================================================
@@ -256,6 +314,17 @@ void constructGraph()
     addEdge(graph, 4, 5, 2);
     addEdge(graph, 4, 6, 3);
     addEdge(graph, 5, 6, 8);
+
+    addEdge(graph, 7, 8, 10);
+    addEdge(graph, 7, 10, 10);
+    addEdge(graph, 8, 9, 10);
+    addEdge(graph, 9, 10, 10);
+
+    addEdge(graph, 11, 12, 10);
+    addEdge(graph, 12, 15, 10);
+    addEdge(graph, 12, 14, 10);
+    addEdge(graph, 12, 13, 10);
+
     //addEdge(graph, 2, 5, 10);
     // addEdge(graph, 2, 5, 2);
 
@@ -277,29 +346,33 @@ void set1()
     // allSolutionsPair pair = allSolutionsPair();
     // allSolution(0,6,vis,30,pair,0,"");
     // cout << endl;
-    // cout <<  pair.lightPath + "@" << pair.lightW << endl ; 
-    // cout <<  pair.heavyPath + "@" << pair.heavyW <<endl; 
-    // cout <<  pair.floorPath + "@" << pair.floor <<endl; 
-    // cout <<  pair.ceilPath + "@" << pair.ceil <<endl; 
+    // cout <<  pair.lightPath + "@" << pair.lightW << endl ;
+    // cout <<  pair.heavyPath + "@" << pair.heavyW <<endl;
+    // cout <<  pair.floorPath + "@" << pair.floor <<endl;
+    // cout <<  pair.ceilPath + "@" << pair.ceil <<endl;
 
     //cout << ans << endl;
 }
 
-void set2(){
+void set2()
+{
 
-    // Hamiltonian path 
-    
+    // Hamiltonian path
+
     vector<bool> vis(N, false);
 
-    hasHamiltonianPath(2,2,"2",vis,N);
+    hasHamiltonianPath(2, 2, "2", vis, N);
 
-    cout << " =============================== " <<endl;
-    int num = allHamiltonianPaths(2,2,"2",vis,N);
+    cout << " =============================== " << endl;
+    int num = allHamiltonianPaths(2, 2, "2", vis, N);
 
     cout << "Number of Hamilton paths : " << num << endl;
 
-    int num2 = allHamiltonianCycles(2,2,"2",vis,N);
+    int num2 = allHamiltonianCycles(2, 2, "2", vis, N);
     cout << "Number of Hamilton cycles : " << num2 << endl;
+
+    int n = GCC();
+    cout << "Total number of components : " << n << endl;
 }
 
 void solve()
