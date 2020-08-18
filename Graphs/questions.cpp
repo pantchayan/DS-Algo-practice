@@ -78,6 +78,30 @@ void surroundedRegions(vector<vector<char>> &board)
     }
 }
 
+// Leetcode 200 ======================================================================================
+// Leetcode 695 ======================================================================================
+// Leetcode 463 ======================================================================================
+
+// Number of distinct Islands ============================================================================================================
+
+int numberOfDistinctIslands(vector<vector<int>> &grid)
+{
+
+    int n = grid.size();
+    int m = grid[0].size();
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            if (grid[i][j] == 1)
+                string island = dfs_NumOfDistinctIslands(i, j, n, m, grid);
+}
+
+string dfs_NumOfDistinctIslands(int r, int c, int n, int m, vector<vector<int>> &grid)
+{
+        
+
+}
+
 void setDFS()
 {
 }

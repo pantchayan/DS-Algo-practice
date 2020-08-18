@@ -314,12 +314,15 @@ void constructGraph()
     addEdge(graph, 4, 5, 2);
     addEdge(graph, 4, 6, 3);
     addEdge(graph, 5, 6, 8);
+    
 
+    // for GCC :: 
+    // component 2
     addEdge(graph, 7, 8, 10);
     addEdge(graph, 7, 10, 10);
     addEdge(graph, 8, 9, 10);
     addEdge(graph, 9, 10, 10);
-
+    //component 3
     addEdge(graph, 11, 12, 10);
     addEdge(graph, 12, 15, 10);
     addEdge(graph, 12, 14, 10);
