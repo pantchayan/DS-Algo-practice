@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <queue>
 using namespace std;
 
 class Edge
@@ -15,7 +16,7 @@ public:
     }
 };
 
-int N = 17;
+int N = 7;
 vector<vector<Edge>> graph(N, vector<Edge>());
 // vector<vector<pair<int,int>>> graph(N,vector<pair<int,int>>());
 
@@ -288,15 +289,67 @@ int GCC()
         {
             count++;
             int size = dfsGCC(i, vis, final);
-            if(maxSize < size){
+            if (maxSize < size)
+            {
                 maxSize = size;
-            }   
+            }
 
             //maxSize = max(maxSize,size);
         }
     }
-    cout <<"Max size of a component : " << maxSize << endl;
+    cout << "Max size of a component : " << maxSize << endl;
     return count;
+}
+// BFS =============================================================================================================================
+
+void BFS(int src, int des)
+{
+
+    //Shortest path
+    int cycle = 0;
+    queue<pair<int, string>> que;
+
+    int level = 0;
+
+    que.push({src, to_string(src) + ""});
+    
+    //delimeter method to keep account of level
+    que.push({-1,"null"});
+        //que.push(nullptr);
+
+    vector<bool> vis(N, false);
+    while (que.size() != 1)
+    {
+        pair<int, string> vtx = que.front();
+        que.pop();
+
+        if(vtx.second == "null"){
+            level++;
+            que.push({-1,"null"});
+            continue;
+        }
+
+        if (vis[vtx.first])
+        {
+            cycle++;
+            cout << vtx.first << "@" << level << endl; 
+            continue;
+        }
+
+        if (vtx.first == des)
+            cout << "Shortest path to " << des << " : " << vtx.second << "@" <<  level << endl;
+        
+        vis[vtx.first] = true;
+
+        for (Edge e : graph[vtx.first])
+        {
+            if (!vis[e.v])
+                que.push({e.v, vtx.second + to_string(e.v)});
+        }
+    }
+
+    cout << "Number of cycles : " << cycle << endl;
+    cout << "Number of levels : " << level << endl;
 }
 
 // =================================================================================================================================
@@ -314,19 +367,18 @@ void constructGraph()
     addEdge(graph, 4, 5, 2);
     addEdge(graph, 4, 6, 3);
     addEdge(graph, 5, 6, 8);
-    
 
-    // for GCC :: 
+    // for GCC ::
     // component 2
-    addEdge(graph, 7, 8, 10);
-    addEdge(graph, 7, 10, 10);
-    addEdge(graph, 8, 9, 10);
-    addEdge(graph, 9, 10, 10);
-    //component 3
-    addEdge(graph, 11, 12, 10);
-    addEdge(graph, 12, 15, 10);
-    addEdge(graph, 12, 14, 10);
-    addEdge(graph, 12, 13, 10);
+    // addEdge(graph, 7, 8, 10);
+    // addEdge(graph, 7, 10, 10);
+    // addEdge(graph, 8, 9, 10);
+    // addEdge(graph, 9, 10, 10);
+    // //component 3
+    // addEdge(graph, 11, 12, 10);
+    // addEdge(graph, 12, 15, 10);
+    // addEdge(graph, 12, 14, 10);
+    // addEdge(graph, 12, 13, 10);
 
     //addEdge(graph, 2, 5, 10);
     // addEdge(graph, 2, 5, 2);
@@ -378,11 +430,18 @@ void set2()
     cout << "Total number of components : " << n << endl;
 }
 
+void set3()
+{
+    BFS(0, 6);
+}
+
 void solve()
 {
     constructGraph();
     //set1();
-    set2();
+    //set2();
+
+    set3();
 }
 
 int main()

@@ -6,3 +6,7 @@
 5 ->  (4,2) (6,8)
 6 ->  (4,3) (5,8)
 
+Cycle @2->2
+Shortest Path : 0346->3
+Cycle @6->4
+Total Cycles : 2
