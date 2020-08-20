@@ -10,3 +10,5 @@ Cycle @2->2
 Shortest Path : 0346->3
 Cycle @6->4
 Total Cycles : 2
+Cycle @0->0
+Total Cycles : 1

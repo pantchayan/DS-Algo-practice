@@ -281,6 +281,8 @@ public class Graph {
         boolean[] vis = new boolean[N];
         //BSF(0, vis);
 
+        BSF03(0 , vis);
+        
         BSF02(0 , vis);
     }
 
