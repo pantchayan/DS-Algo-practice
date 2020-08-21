@@ -312,10 +312,10 @@ void BFS(int src, int des)
     int level = 0;
 
     que.push({src, to_string(src) + ""});
-    
+
     //delimeter method to keep account of level
-    que.push({-1,"null"});
-        //que.push(nullptr);
+    que.push({-1, "null"});
+    //que.push(nullptr);
 
     vector<bool> vis(N, false);
     while (que.size() != 1)
@@ -323,22 +323,23 @@ void BFS(int src, int des)
         pair<int, string> vtx = que.front();
         que.pop();
 
-        if(vtx.second == "null"){
+        if (vtx.second == "null")
+        {
             level++;
-            que.push({-1,"null"});
+            que.push({-1, "null"});
             continue;
         }
 
         if (vis[vtx.first])
         {
             cycle++;
-            cout << vtx.first << "@" << level << endl; 
+            cout << vtx.first << "@" << level << endl;
             continue;
         }
 
         if (vtx.first == des)
-            cout << "Shortest path to " << des << " : " << vtx.second << "@" <<  level << endl;
-        
+            cout << "Shortest path to " << des << " : " << vtx.second << "@" << level << endl;
+
         vis[vtx.first] = true;
 
         for (Edge e : graph[vtx.first])
@@ -352,12 +353,63 @@ void BFS(int src, int des)
     cout << "Number of levels : " << level << endl;
 }
 
+// Bipartite Check ===============================================================================================================
+
+bool bipartiteBFS(int src, vector<int> &vis)
+{
+    queue<pair<int, int>> que;
+    que.push({src, 0});
+
+    while (que.size() != 0)
+    {
+        int size = que.size();
+
+        while (size-- > 0)
+        {
+            pair<int , int> rvtx = que.front();
+            que.pop();
+
+            //Check to detect a cycle
+            if(vis[rvtx.first]!=-1){
+
+                //Check to detect an odd cycle
+                if(vis[rvtx.first]!=rvtx.second){
+                    return false;
+                }
+                continue;
+            }
+
+            vis[rvtx.first] = rvtx.second;
+
+            for (Edge e : graph[rvtx.first])
+            {
+                if (vis[e.v] == -1)
+                {
+                    que.push({e.v, (rvtx.second + 1)%2});
+                    
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+void isBipartite()
+{
+    vector<int> vis(N, -1); // 0 : Red , 1 : Green , -1 : Nothing(not visited yet)
+
+    for (int i = 0; i < N; i++)
+    {
+        if (vis[i] == -1)
+        {
+            bool ans = bipartiteBFS(i, vis);
+            cout << boolalpha << ans << endl;
+        }
+    }
+}
+
 // =================================================================================================================================
-
-
-
-
-
 
 void constructGraph()
 {
@@ -369,7 +421,7 @@ void constructGraph()
     addEdge(graph, 0, 3, 10);
     addEdge(graph, 1, 2, 10);
     addEdge(graph, 2, 3, 40);
-    addEdge(graph, 3, 4, 2);
+    //addEdge(graph, 3, 4, 2);
     addEdge(graph, 4, 5, 2);
     addEdge(graph, 4, 6, 3);
     addEdge(graph, 5, 6, 8);
@@ -438,7 +490,9 @@ void set2()
 
 void set3()
 {
-    BFS(0, 6);
+    //BFS(0, 6);
+
+    isBipartite();
 }
 
 void solve()
