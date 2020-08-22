@@ -2,9 +2,9 @@
 1-> 2, 
 2-> 3, 
 3-> 4, 
-4-> 
+4-> 1, 
 5-> 4, 
 
 5->0->1->2->3->4->
-Topological Order
-[5, 0, 1, 2, 3, 4]
+Cycle found -- Deadlock present -- No correct topological order possible
+Cycle found.

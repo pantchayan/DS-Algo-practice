@@ -105,12 +105,65 @@ public class directedGraph {
         }
 
     }
+
+
+    // DFS topological Cycle detection ================================================================================
+
+
+    private static boolean topologicalCycleDFS(int src, int[] vis,ArrayList<Integer> ans) {
+        vis[src] = 1;
+        boolean res = false;
+        for(Integer v : graph[src]){
+            if(vis[v]==0){
+                res = res||topologicalCycleDFS(v, vis,ans);
+            }
+            else if(vis[v]==1){
+                return true;
+            }
+        }
+
+        vis[src]=2;
+        ans.add(src);
+        return res;
+    }
+
+
+    public static void topologicalCycle(){
+        int[] vis = new int[N]; // 0 : unvisited , 1 : same path vis(cycle) , 2 : other path vis
+
+        ArrayList<Integer> ans = new ArrayList<>();
+        boolean res = false;
+        for(int i=0;i<N;i++){
+            if(vis[i]==0){
+                res = res || topologicalCycleDFS(i,vis,ans);
+            }
+        }
+
+        if(res){
+            System.out.println("Cycle found.");
+        }
+        else{
+            for (int i = ans.size() - 1; i >= 0; i--) {
+                System.out.print(ans.get(i) + "->");
+            }
+            System.out.println();
+        }
+
+    }
+
+
+
     // ================================================================================================================
+
+    
 
     public static void set1() {
         topologicalSort();
 
         kahnAlgo();
+
+        topologicalCycle();
+
     }
 
     public static void constructGraph() {
@@ -124,7 +177,7 @@ public class directedGraph {
         graph[2].add(3);
         graph[3].add(4);
         graph[5].add(4);
-       // graph[4].add(1);
+        graph[4].add(1);
         // graph[2].add(1);
         // graph[3].add(1);
         // graph[1].add(0);
