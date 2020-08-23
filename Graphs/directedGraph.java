@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 public class directedGraph {
 
-    static int N = 6;
+    static int N = 12;
 
     static ArrayList<Integer>[] graph = new ArrayList[N];
 
@@ -150,6 +150,80 @@ public class directedGraph {
         }
 
     }
+     
+    // Strongly connected components ================================================================================ 
+
+    public static void topologicalSortSCC(int src,boolean[] vis, ArrayList<Integer> ans){
+
+        vis[src] = true;
+        for(Integer ele:graph[src]){
+            if(!vis[ele]){
+                topologicalSortSCC(ele, vis, ans);
+            }
+        }
+
+        ans.add(src);
+    }
+
+    public static int dfsSCC(int src,ArrayList<Integer>[] ngraph,boolean[] vis,ArrayList<Integer> ans){
+        vis[src] = true;
+        int count = 0;
+        for(Integer ele:ngraph[src]){
+            if(!vis[ele]){
+                count+=dfsSCC(ele, ngraph, vis, ans);
+            }
+        }
+        ans.add(src);
+
+        return count+1;
+    }
+
+
+    public static void SCC(){
+        
+        // KOSARAJU ALGORITHM
+
+        // Step 1 - find topological order of the the graph.
+        boolean[] vis = new boolean[N];
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for(int i=0;i<N;i++){
+            if(!vis[i]){
+                topologicalSortSCC(i,vis,ans);
+            }
+        }
+
+        // Step 2 - reverse the graph
+
+        ArrayList<Integer>[] ngraph = new ArrayList[N];
+
+        for(int i=0;i<N;i++){
+            ngraph[i] = new ArrayList<Integer>();
+        }
+
+        for(int i=0;i<N;i++){
+            for(Integer ele:graph[i]){
+                ngraph[ele].add(i);
+            }
+        }
+
+        // Step 3 - call DFS in topological order on the new reversed graph
+
+        ArrayList<Integer> ansFinal = new ArrayList<>();
+        vis = new boolean[N];
+        for(int i=ans.size()-1;i>=0;i--){
+            int src = ans.get(i);
+            if(!vis[src]){
+                int size = dfsSCC(src,ngraph,vis,ansFinal);
+
+                System.out.print(ansFinal+"@"+size+" -> ");
+            }
+            ansFinal = new ArrayList<>();
+        }
+        System.out.println();
+        
+    }
 
 
 
@@ -164,6 +238,7 @@ public class directedGraph {
 
         topologicalCycle();
 
+        SCC();
     }
 
     public static void constructGraph() {
@@ -171,16 +246,25 @@ public class directedGraph {
             graph[i] = new ArrayList<Integer>();
         }
 
-        graph[0].add(1);
         graph[1].add(2);
-
+        graph[3].add(1);
         graph[2].add(3);
+
         graph[3].add(4);
-        graph[5].add(4);
-        graph[4].add(1);
-        // graph[2].add(1);
-        // graph[3].add(1);
-        // graph[1].add(0);
+
+        graph[4].add(5);
+        graph[5].add(6);
+        graph[6].add(7);
+        graph[7].add(4);
+
+        graph[7].add(8);
+
+        
+        graph[8].add(9);
+        graph[9].add(10);
+        graph[10].add(8);
+
+        graph[11].add(10);
 
         display();
 
