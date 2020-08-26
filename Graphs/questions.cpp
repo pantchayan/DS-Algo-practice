@@ -165,20 +165,6 @@ int shortestPathBinaryMatrix(vector<vector<int>> &grid)
 
 // Leetcode 286 (Lintcode) Walls and gates in room 2D ======================================================================================================================
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Leetcode 994 Rotten Oranges =======================================================================================================================
 int orangesRotting(vector<vector<int>> &grid)
 {
@@ -261,90 +247,160 @@ int orangesRotting(vector<vector<int>> &grid)
 }
 // Leetcode 684 (Union Find) Redundant connection =========================================================================================
 
-    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        
-        int N = edges.size();
-        vector<int> size(N+1,1);
-        vector<int> par(N+1,0);
-        
-        vector<int> ans;
-        for(int i=1;i<=N;i++){
-            par[i] = i;
-            //size[i] = 1;
-        }
-        
-        for(vector<int> pair:edges){
-            cout << pair[0]<<" "<<pair[1];
-            int l1 = findPar(pair[0],par);
-            int l2 = findPar(pair[1],par);
-            
-            if(l1==l2){
-                return pair;
-                
-            }
-            else{
-                mergeSet(l1,l2,size,par);
-                
-            }
-        }
-        
-        return ans;
+vector<int> findRedundantConnection(vector<vector<int>> &edges)
+{
+
+    int N = edges.size();
+    vector<int> size(N + 1, 1);
+    vector<int> par(N + 1, 0);
+
+    vector<int> ans;
+    for (int i = 1; i <= N; i++)
+    {
+        par[i] = i;
+        //size[i] = 1;
     }
-    
-    int findPar(int vtx,vector<int> &par){
-        if(par[vtx]==vtx) return vtx;
-        vtx = findPar(par[vtx],par);
+
+    for (vector<int> pair : edges)
+    {
+        cout << pair[0] << " " << pair[1];
+        int l1 = findPar(pair[0], par);
+        int l2 = findPar(pair[1], par);
+
+        if (l1 == l2)
+        {
+            return pair;
+        }
+        else
+        {
+            mergeSet(l1, l2, size, par);
+        }
+    }
+
+    return ans;
+}
+
+int findPar(int vtx, vector<int> &par)
+{
+    if (par[vtx] == vtx)
         return vtx;
+    vtx = findPar(par[vtx], par);
+    return vtx;
+}
+
+void mergeSet(int l1, int l2, vector<int> &size, vector<int> &par)
+{
+
+    if (size[l1] < size[l2])
+    {
+        par[l1] = l2;
+        size[l2] += size[l1];
     }
-    
-    void mergeSet(int l1,int l2,vector<int> &size,vector<int> &par){
-        
-        if(size[l1]<size[l2]){
-            par[l1] = l2;
-            size[l2]+=size[l1];
-        }
-        else{
-            par[l2] = l1;
-            size[l1]+=size[l2];
-        }
-    
+    else
+    {
+        par[l2] = l1;
+        size[l1] += size[l2];
     }
+}
 // Leetcode 547 UnionFind for GCC in Matrix -- Friend circles ==========================================================================
-    int findCircleNum(vector<vector<int>>& M) {
-        int n = M.size();
-        
-        vector<int> par;
-        for(int i=0;i<n;i++){
-            par.push_back(i);
+int findCircleNum(vector<vector<int>> &M)
+{
+    int n = M.size();
+
+    vector<int> par;
+    for (int i = 0; i < n; i++)
+    {
+        par.push_back(i);
+    }
+
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i; j < n; j++)
+        {
+            if (i != j && M[i][j] == 1)
+            {
+                int l1 = findPar(i, par);
+                int l2 = findPar(j, par);
+                if (l1 == l2)
+                {
+                    continue;
+                }
+                else
+                {
+                    count++;
+                    par[l1] = l2;
+                }
+            }
         }
-        
-        int count=0;
-        for(int i=0;i<n;i++){
-            for(int j=i;j<n;j++){
-                if(i!=j && M[i][j]==1){
-                    int l1 = findPar(i,par);
-                    int l2 = findPar(j,par);  
-                    if(l1==l2){
-                        continue;
-                    }
-                    else{
-                        count++;
-                        par[l1]= l2;
+    }
+
+    return n - count;
+}
+
+// Leetcode 200 - numsIsland using UNION FIND (Superior) ================================================================================
+
+int numIslands(vector<vector<char>> &grid)
+{
+    // Union Find method
+
+    if (grid.size() == 0)
+        return 0;
+
+    int N = grid.size();
+    int M = grid[0].size();
+
+    vector<int> par;
+
+    for (int i = 0; i < N * M; i++)
+    {
+        par.push_back(i);
+    }
+
+    int numOfOnes = 0;
+    int mergeCount = 0;
+    int dir[2][2] = {{1, 0}, {0, 1}};
+    int count = 0;
+    for (int i = 0; i < N * M; i++)
+    {
+        int r = i / M;
+        int c = i % M;
+
+        if (grid[r][c] == '1')
+        {
+            numOfOnes++;
+            for (int k = 0; k < 2; k++)
+            {
+                int x = r + dir[k][0];
+                int y = c + dir[k][1];
+
+                if (x >= 0 && y >= 0 && x < N && y < M && grid[x][y] == '1')
+                {
+                    int j = x * M + y;
+                    // normal findPar method
+                    int l1 = findPar(i, par);
+                    int l2 = findPar(j, par);
+
+                    if (l1 != l2)
+                    {
+                        par[l2] = l1;
+                        mergeCount++;
                     }
                 }
             }
         }
-        
-        
-        return n-count;
-        
     }
 
+    // for(int i=0;i<par.size();i++){
+    //     if(par[i]==i && grid[i/M][i%M]=='1'){
+    //         count++;
+    //     }
+    // }
+
+    return numOfOnes - mergeCount;
+}
 
 //=======================================================================================================================================
-
-
-
 
 void setDFS()
 {
