@@ -125,14 +125,15 @@ public class GraphR {
 
     // GCC -- Get Connected Componenets ======================================================================================================
 
-    public static int dfsGCC(int src,int size,boolean[] vis){
+    public static int dfsGCC(int src,boolean[] vis){
         vis[src] = true;
+        int count = 0;
         for(Edge e:graph[src]){
             if(!vis[e.v]){
-                dfsGCC(e.v,size++,vis);
+                count+=dfsGCC(e.v,vis);
             }
         }
-        return size+1;
+        return count+1;
     }
 
 
@@ -142,7 +143,7 @@ public class GraphR {
         int maxSize = 0;
         for(int i=0;i<N;i++){
             if(!vis[i]){
-                maxSize = Math.max(dfsGCC(i,0,vis),maxSize);
+                maxSize = Math.max(dfsGCC(i,vis),maxSize);
                 count++;
             }
         }
