@@ -1,47 +1,130 @@
 import java.util.ArrayList;
-public class GraphR{
 
-    public static class Edge{
+public class GraphR {
+
+    public static class Edge {
         int v = 0;
         int w = 0;
 
-        Edge(int v,int w){
+        Edge(int v, int w) {
             this.v = v;
             this.w = w;
         }
     }
-    static int N = 7;
+
+    static int N = 8;
     static ArrayList<Edge>[] graph = new ArrayList[N];
 
-    public static void addEdge(ArrayList<Edge>[] graph,int u,int v,int w){
-        // bidirectional graph 
-        graph[u].add(new Edge(v,w));
-        graph[v].add(new Edge(u,w));
-        
+    // Basics ====================================================================================================
+
+    public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
+        // bidirectional graph
+        graph[u].add(new Edge(v, w));
+        graph[v].add(new Edge(u, w));
+
     }
 
-    public static void display(ArrayList<Edge>[] graph){
+    public static void display(ArrayList<Edge>[] graph) {
 
-        for(int i=0;i<N;i++){
-            System.out.print(i +" -> ");
-            for(Edge e:graph[i]){
-                System.out.print("("+e.v+", "+e.w+") ");
+        for (int i = 0; i < N; i++) {
+            System.out.print(i + " -> ");
+            for (Edge e : graph[i]) {
+                System.out.print("(" + e.v + ", " + e.w + ") ");
             }
             System.out.println();
         }
         System.out.println();
     }
 
-
-
-
-
-    public static void setDFS(){
-
+    public static void removeEdge(int u, int v) {
+        for (Edge e : graph[u]) {
+            if (e.v == v) {
+                graph[u].remove(e);
+                break;
+            }
+        }
+        for (Edge e : graph[v]) {
+            if (e.v == u) {
+                graph[v].remove(e);
+                break;
+            }
+        }
     }
 
-    public static void constructGraph(){
-        for(int i=0;i<N;i++){
+    public static void removeVtx(int u) {
+        for (Edge e1 : graph[u]) {
+            int v = e1.v;
+            for (Edge e2 : graph[v]) {
+                if (e2.v == u) {
+                    graph[v].remove(e2);
+                    break;
+                }
+            }
+        }
+        for (int i = graph[u].size() - 1; i >= 0; i--) {
+            graph[u].remove(i);
+        }
+    }
+
+    // =====================================================================================================
+    
+    
+    // DFS =================================================================================================
+
+    public static boolean hasPath(int src,int dest,boolean[] vis){
+        if(src==dest) return true;
+
+        vis[src] = true;
+        boolean res = false;
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+                res = res || hasPath(e.v, dest, vis);
+            }
+        }
+        return res;
+    } 
+
+    public static void allPath(int src, int dest,boolean[] vis,int pw, String psf){
+        if(src==dest) System.out.println(psf+"@"+pw);
+
+        vis[src] = true;
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+                allPath(e.v, dest, vis, pw+e.w, psf+e.v);
+            }
+        }
+        vis[src] = false;
+    }
+
+    // Hamiltonian Path ==================================================================================================================
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static void setDFS() {
+        boolean[] vis = new boolean[N];
+        System.out.println(hasPath(0, 5, vis));
+        System.out.println(hasPath(0, 7, vis));
+        
+        vis = new boolean[N];
+        allPath(0, 6, vis, 0, "0");
+    }
+
+    public static void constructGraph() {
+        for (int i = 0; i < N; i++) {
             graph[i] = new ArrayList<Edge>();
         }
 
@@ -58,9 +141,16 @@ public class GraphR{
 
         display(graph);
 
+        // removeEdge(5, 6);
+
+        // removeVtx(2);
+
+        // System.out.println();
+
+        // display(graph);
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         constructGraph();
         setDFS();
     }
