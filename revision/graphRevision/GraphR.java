@@ -12,7 +12,7 @@ public class GraphR {
         }
     }
 
-    static int N = 8;
+    static int N = 7;
     static ArrayList<Edge>[] graph = new ArrayList[N];
 
     // Basics ====================================================================================================
@@ -98,12 +98,58 @@ public class GraphR {
 
     // Hamiltonian Path ==================================================================================================================
 
+    public static boolean hasHamiltonian(int src,int count,boolean[] vis){
+        if(count+1==N) return true;
+        vis[src] = true;
+        boolean res = false;
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+               res = res || hasHamiltonian(e.v, count+1, vis);
+            }
+        }
+        return res;
+    }
+
     
+    public static void allHamiltoninan(int src,int count, boolean[] vis,int pw, String psf){
+        if(count+1==N) System.out.println(psf+"@"+pw);
+
+        vis[src] = true;
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+                allHamiltoninan(e.v,count+1, vis, pw+e.w, psf+e.v);
+            }
+        }
+        vis[src] = false;
+    }
+
+    // GCC -- Get Connected Componenets ======================================================================================================
+
+    public static int dfsGCC(int src,int size,boolean[] vis){
+        vis[src] = true;
+        for(Edge e:graph[src]){
+            if(!vis[e.v]){
+                dfsGCC(e.v,size++,vis);
+            }
+        }
+        return size+1;
+    }
 
 
-
-
-
+    public static void GCC(){
+        boolean[] vis = new boolean[N];
+        int count = 0;
+        int maxSize = 0;
+        for(int i=0;i<N;i++){
+            if(!vis[i]){
+                maxSize = Math.max(dfsGCC(i,0,vis),maxSize);
+                count++;
+            }
+        }
+        System.out.println("Number of Components : "+ count);
+        
+        System.out.println("Maximum size of a component : "+ maxSize);
+    }
 
 
 
@@ -117,10 +163,18 @@ public class GraphR {
     public static void setDFS() {
         boolean[] vis = new boolean[N];
         System.out.println(hasPath(0, 5, vis));
-        System.out.println(hasPath(0, 7, vis));
+        //System.out.println(hasPath(0, 7, vis));
         
         vis = new boolean[N];
         allPath(0, 6, vis, 0, "0");
+        System.out.println("\nHamilton : ");
+        System.out.println(hasHamiltonian(0, 0, vis));
+        vis = new boolean[N];
+        allHamiltoninan(0, 0, vis, 0, "0");
+
+        System.out.println("GCC : ");
+
+        GCC();
     }
 
     public static void constructGraph() {

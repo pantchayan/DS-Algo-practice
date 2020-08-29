@@ -5,11 +5,17 @@
 4 -> (3, 6) (5, 5) (6, 8) 
 5 -> (4, 5) (6, 1) 
 6 -> (4, 8) (5, 1) 
-7 -> 
 
 true
-false
 0123456@42
 012346@44
 03456@22
 0346@24
+
+Hamilton : 
+true
+0123456@42
+0123465@45
+GCC : 
+Number of Components : 1
+Maximum size of a componenet : 2
