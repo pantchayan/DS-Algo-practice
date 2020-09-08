@@ -443,6 +443,50 @@ int numIslands(vector<vector<char>> &grid)
 // Leetcode  - Water Distribution in a village ==========================================================================================
 
 
+int findPar(int vtx,vector<int>& par){
+    if(par[vtx] == vtx) return vtx;
+
+    return par[vtx] = findPar(par[vtx],par);
+}
+
+
+
+int waterDistribution(int n,vector<int>& wells,vector<vector<int>>& pipes){
+    //pipes -- > (u,v,w) 
+
+    for(int i=0;i<n;i++){
+        vector<int> newEdge = {0,i,wells[i]};
+        pipes.push_back(newEdge);
+    }
+
+    // sorting the 2d array pipes w.r.t. weights coloumn =========================================================
+    std::sort(pipes.begin(),
+          pipes.end(),
+          [] (const std::vector<double> &a, const std::vector<double> &b)
+          {
+              return a[2] < b[2];
+          });
+
+    vector<int> par;
+
+    for(int i=0;i<n;i++){
+        par.push_back(i);
+    }
+
+    int cost = 0;
+    for(vector<int> edge:pipes){
+        int p1 = findPar(edge[0],par);
+        int p2 = findPar(edge[1],par);
+         
+        if(p1!=p2){
+            par[p2] = p1;
+            cost = cost + edge[2];
+        }
+    }
+
+    return cost;
+}
+
 
 //=======================================================================================================================================
 
