@@ -488,6 +488,7 @@ int waterDistribution(int n,vector<int>& wells,vector<vector<int>>& pipes){
 
 
 // Mr. President HackerEarth ===========================================================================================================
+// https://www.hackerearth.com/practice/algorithms/graphs/minimum-spanning-tree/practice-problems/algorithm/mr-president/submissions/
 
 
 int mrPresident()
