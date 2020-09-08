@@ -449,8 +449,6 @@ int findPar(int vtx,vector<int>& par){
     return par[vtx] = findPar(par[vtx],par);
 }
 
-
-
 int waterDistribution(int n,vector<int>& wells,vector<vector<int>>& pipes){
     //pipes -- > (u,v,w) 
 
