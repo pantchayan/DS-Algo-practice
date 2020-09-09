@@ -80,7 +80,7 @@ public class Graph {
             this.psf = psf;
         }
 
-        // For BFS02 -- level storing
+        // For BFS032 -- level storing
         pair(int vtx, String psf, int level) {
             this.vtx = vtx;
             this.psf = psf;
@@ -92,7 +92,7 @@ public class Graph {
 
 
 
-    private static void BSF(int i, boolean[] vis) {
+    private static void BFS(int i, boolean[] vis) {
         LinkedList<pair> que = new LinkedList<>();
         int des = 6;
         int cycle = 0;
@@ -129,7 +129,7 @@ public class Graph {
 
     // Delimeter method  -- using null to keep an account of LEVELS 
 
-    private static void BSF02(int i, boolean[] vis) {
+    private static void BFS02(int i, boolean[] vis) {
         LinkedList<pair> que = new LinkedList<>();
         int des = 6;
         int cycle = 0;
@@ -177,7 +177,7 @@ public class Graph {
     
     // Storing level in the pair class itself 
 
-    private static void BSF03(int i, boolean[] vis) {
+    private static void BFS03(int i, boolean[] vis) {
         LinkedList<pair> que = new LinkedList<>();
         int des = 6;
         int cycle = 0;
@@ -215,7 +215,7 @@ public class Graph {
 
 
 
-    private static void BSF04(int i, boolean[] vis) {
+    private static void BFS04(int i, boolean[] vis) {
         LinkedList<pair> que = new LinkedList<>();
         int des = 6;
         int level= 0;
@@ -279,11 +279,11 @@ public class Graph {
 
     public static void set1() {
         boolean[] vis = new boolean[N];
-        //BSF(0, vis);
+        BFS(0, vis);
 
-        BSF03(0 , vis);
+        BFS03(0 , vis);
         
-        BSF02(0 , vis);
+        BFS02(0 , vis);
     }
 
     public static void main(String[] args) {
