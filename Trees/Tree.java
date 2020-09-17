@@ -1,6 +1,4 @@
 public class Tree {
-    
-    
     public static class Node{
         int data = 0;
         Node left = null;
@@ -29,6 +27,8 @@ public class Tree {
 
     static int idx = 0;
 
+    
+    // preOrder -- > Binary Tree
     public static Node preConstruct(int[] arr){
         if(idx==arr.length || arr[idx] == -1){ 
             idx++;
@@ -41,19 +41,9 @@ public class Tree {
     } 
  
     public static void constructTree(){
-        // pre order array
         int[] arr = {13,3,31,1,-1,-1,2001,-1,-1,-1,2002,-1,-1};
         Node root = preConstruct(arr);
 
-        // root.left= new Node(3);
-        
-        // root.left.left = new Node(31);
-
-        // root.left.left.left = new Node(1);
-
-        // root.right = new Node(2002);
-
-        // root.left.left.right = new Node(2001);
         display(root);
     }
 
