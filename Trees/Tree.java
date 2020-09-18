@@ -25,10 +25,11 @@ public class Tree {
 
     } 
 
-    static int idx = 0;
 
     
-    // preOrder -- > Binary Tree
+    // preOrder -- > Binary Tree 
+    
+    static int idx = 0;
     public static Node preConstruct(int[] arr){
         if(idx==arr.length || arr[idx] == -1){ 
             idx++;
