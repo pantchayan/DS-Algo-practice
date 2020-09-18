@@ -52,6 +52,27 @@ public class Tree {
 
     // Basics ==================================================================================================================
 
+    public static int size(Node node){
+        if(node==null) return 0;
+        return size(node.left)+size(node.right)+1;
+    }
+
+    public static int height(Node node){
+        if(node==null) return -1;
+        return Math.max(height(node.left),height(node.right))+1;
+    }
+
+    public static int Maximum(Node node){
+        if(node==null) return Integer.MIN_VALUE;
+        if(node.left == null && node.right==null) return node.data;
+        return Math.max(Math.max(Maximum(node.left),Maximum(node.right)),node.data);
+    }
+    
+    public static int Minimum(Node node){
+        if(node==null) return Integer.MAX_VALUE;
+        if(node.left == null && node.right==null) return node.data;
+        return Math.min(Math.min(Minimum(node.left),Minimum(node.right)),node.data);
+    }
 
 
 
@@ -63,16 +84,19 @@ public class Tree {
 
 
 
+    public static void set1(){
+        int size = size(root);
+        int height = height(root);
+        System.out.println(size +" "+height);
 
-
-
-
-
-
+        System.out.println(Maximum(root));
+        System.out.println(Minimum(root));
+    }
 
 
     public static  void solve(){
         constructTree();
+        set1();
     }
 
     public static void main(String[] args){
