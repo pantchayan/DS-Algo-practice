@@ -1,4 +1,7 @@
 public class Tree {
+
+    // Structure ===========================
+
     public static class Node{
         int data = 0;
         Node left = null;
@@ -9,6 +12,9 @@ public class Tree {
         }
     }
 
+    static Node root = null;
+
+    // Creation and display =================
 
     public static void display(Node node){
         if(node==null) return;
@@ -24,11 +30,8 @@ public class Tree {
         display(node.right);
 
     } 
-
-
     
     // preOrder -- > Binary Tree 
-    
     static int idx = 0;
     public static Node preConstruct(int[] arr){
         if(idx==arr.length || arr[idx] == -1){ 
@@ -43,14 +46,37 @@ public class Tree {
  
     public static void constructTree(){
         int[] arr = {13,3,31,1,-1,-1,2001,-1,-1,-1,2002,-1,-1};
-        Node root = preConstruct(arr);
-
+        root = preConstruct(arr);
         display(root);
     }
 
+    // Basics ==================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static  void solve(){
+        constructTree();
+    }
 
     public static void main(String[] args){
-        constructTree();
+        solve();
     }
 
 }
