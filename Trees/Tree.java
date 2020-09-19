@@ -75,7 +75,16 @@ public class Tree {
     }
 
 
+    public static boolean Find(Node node,int data){
+        if(node==null) return false;
+        if(node.data==data) return true;
+        
+        // boolean res = false;
+        // res = res || Find(node.left,data) || Find(node.right,data);
+        // return res;
 
+        return Find(node.left,data) || Find(node.right,data);
+    }
 
 
 
@@ -91,6 +100,8 @@ public class Tree {
 
         System.out.println(Maximum(root));
         System.out.println(Minimum(root));
+
+        System.out.println(Find(root,2001));
     }
 
 
