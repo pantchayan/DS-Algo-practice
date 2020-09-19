@@ -86,10 +86,31 @@ public class Tree {
         return Find(node.left,data) || Find(node.right,data);
     }
 
+    // Traversals ============================================================================================================
 
+    public static void inorder(Node node){
+        if(node==null) return;
 
+        inorder(node.left);
+        System.out.print(node.data+", ");
+        inorder(node.right);
+    }
 
+    public static void preorder(Node node){
+        if(node==null) return;
 
+        System.out.print(node.data+", ");
+        preorder(node.left);
+        preorder(node.right);
+    }
+
+    public static void postorder(Node node){
+        if(node==null) return;
+
+        postorder(node.left);
+        postorder(node.right);
+        System.out.print(node.data+", ");
+    }
 
 
 
@@ -102,6 +123,8 @@ public class Tree {
         System.out.println(Minimum(root));
 
         System.out.println(Find(root,2001));
+
+        preorder(root);
     }
 
 
