@@ -115,7 +115,7 @@ public class Tree {
 
     // Path in Arraylist ==============================================================================================================
 
-    public static boolean findPath(Node node, ArrayList<Node> path,int data){
+    public static boolean rootToNodePath01(Node node, ArrayList<Node> path,int data){
         if(node==null) return false;
         if(node.data==data){
             path.add(node);
@@ -124,7 +124,7 @@ public class Tree {
 
         boolean res = false;
 
-        res = res || findPath(node.left, path,data) || findPath(node.right, path,data);
+        res = res || rootToNodePath01(node.left, path,data) || rootToNodePath01(node.right, path,data);
         if(res) path.add(node);
         return res;
     }
@@ -145,7 +145,7 @@ public class Tree {
         // preorder(root);
 
         ArrayList<Node> path = new ArrayList<>();
-        findPath(root,path,2001);
+        rootToNodePath01(root,path,2001);
         System.out.println(path);
 
         for(Node node:path){
