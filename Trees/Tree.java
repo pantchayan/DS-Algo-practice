@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Tree {
 
     // Structure ===========================
@@ -112,19 +113,45 @@ public class Tree {
         System.out.print(node.data+", ");
     }
 
+    // Path in Arraylist ==============================================================================================================
+
+    public static boolean findPath(Node node, ArrayList<Node> path,int data){
+        if(node==null) return false;
+        if(node.data==data){
+            path.add(node);
+            return true;
+        }
+
+        boolean res = false;
+
+        res = res || findPath(node.left, path,data) || findPath(node.right, path,data);
+        if(res) path.add(node);
+        return res;
+    }
+
+    // 
 
 
     public static void set1(){
-        int size = size(root);
-        int height = height(root);
-        System.out.println(size +" "+height);
+        // int size = size(root);
+        // int height = height(root);
+        // System.out.println(size +" "+height);
 
-        System.out.println(Maximum(root));
-        System.out.println(Minimum(root));
+        // System.out.println(Maximum(root));
+        // System.out.println(Minimum(root));
 
-        System.out.println(Find(root,2001));
+        // System.out.println(Find(root,2001));
 
-        preorder(root);
+        // preorder(root);
+
+        ArrayList<Node> path = new ArrayList<>();
+        findPath(root,path,2001);
+        System.out.println(path);
+
+        for(Node node:path){
+            System.out.print(node.data+" ");
+        }
+        System.out.println();
     }
 
 
