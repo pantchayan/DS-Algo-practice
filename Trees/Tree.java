@@ -129,7 +129,30 @@ public class Tree {
         return res;
     }
 
-    // 
+    // Lowest Common Ancestor ===========================================================================================================
+
+    // 1st way is to find 2 different paths and find the LCA by linear search with 2 pointers from back O(n)+O(logn) time and space complexity.
+    // 2nd way is to do in O(n)+O(1) time and space complexity. 
+
+    static Node LCANode = null;
+    public static boolean LCA02(Node node,Node p,Node q){
+        boolean SelfDone = false;
+        if(node==null) return false;
+        if(node.data==p.data || node.data==q.data){
+            SelfDone = true;
+        }
+        boolean Left = LCA02(node.left,p,q);
+        if(LCANode!=null)return true;
+        
+        boolean Right = LCA02(node.right,p,q);
+        if(LCANode!=null)return true;
+
+        if((SelfDone&&Left)||(SelfDone&&Right)||(Right&&Left)){
+            LCANode = node;
+        }
+
+        return SelfDone||Right||Left;
+    }
 
 
     public static void set1(){
