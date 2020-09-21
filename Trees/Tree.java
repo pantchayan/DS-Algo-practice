@@ -169,7 +169,7 @@ public class Tree {
 
         ArrayList<Node> path = new ArrayList<>();
         rootToNodePath01(root,path,2001);
-        System.out.println(path);
+        //System.out.println(path);
 
         for(Node node:path){
             System.out.print(node.data+" ");
