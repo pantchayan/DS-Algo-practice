@@ -46,7 +46,7 @@ public class Tree {
     } 
  
     public static void constructTree(){
-        int[] arr = {13,3,31,1,-1,-1,2001,-1,-1,-1,2002,-1,-1};
+        int[] arr={10,20,40,-1,-1,50,80,-1,-1,90,-1,-1,30,60,100,-1,-1,-1,70,110,-1,-1,120,-1,-1};
         root = preConstruct(arr);
         display(root);
     }
@@ -168,7 +168,7 @@ public class Tree {
         // preorder(root);
 
         ArrayList<Node> path = new ArrayList<>();
-        rootToNodePath01(root,path,2001);
+        rootToNodePath01(root,path,120);
         //System.out.println(path);
 
         for(Node node:path){
