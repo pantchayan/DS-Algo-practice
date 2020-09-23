@@ -193,14 +193,14 @@ public class Tree {
         for(int i=0;i<path.size();i++){
             if((K-i)<0) break;
             if(i==0)
-                Kdown(path.get(i),K-i,null);
+                kDown(path.get(i),K-i,null);
             else
-                Kdown(path.get(i),K-i,path.get(i-1));
+                kDown(path.get(i),K-i,path.get(i-1));
             
         }
     }
 
-    public static void Kdown(Node node,int K,Node blocked){
+    public static void kDown(Node node,int K,Node blocked){
         if(node==null || node==blocked) return;
         if(K<0) return;
         if(K==0) {
@@ -208,16 +208,42 @@ public class Tree {
             return;
         }
 
-        Kdown(node.left, K-1, blocked);
-        Kdown(node.right, K-1, blocked);
+        kDown(node.left, K-1, blocked);
+        kDown(node.right, K-1, blocked);
     }
 
+    public static int allNodesKaway02(Node root, int target, int K) {
+        if (root == null) return -1;
 
+        if (root.data == target) {
+            kDown(root, K, null);
+            return 1;
+        }
+
+        int leftdistance = allNodesKaway02(root.left, target, K);
+        if (leftdistance != -1) {
+            if (K - leftdistance >= 0) kDown(root, K - leftdistance, root.left);
+            return leftdistance + 1;
+        }
+
+        int rightdistance = allNodesKaway02(root.right, target, K);
+        if (rightdistance != -1) {
+            if (K - rightdistance >= 0) kDown(root, K - rightdistance, root.right);
+            return rightdistance + 1;
+        }
+
+        return -1;
+
+    }
 
     public static void set2() {
         // lets code for allNodesKaway
         System.out.println();
         allNodesKaway01(root, 50, 5);
+
+        System.out.println();
+        
+        allNodesKaway02(root, 50, 5);
     }
 
     public static void set1() {
