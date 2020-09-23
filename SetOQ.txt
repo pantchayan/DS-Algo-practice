@@ -1,0 +1,9 @@
+Set of questions :
+https://www.pepcoding.com/most-important-interview-questions-list-for-product-based-companies
+
+
+Advanced Backtracking :
+https://www.pepcoding.com/resources/data-structures-and-algorithms-in-java-levelup/recursion-and-backtracking
+
+Bit Manipulation : 
+https://www.pepcoding.com/resources/data-structures-and-algorithms-in-java-levelup/bit-manipulation
