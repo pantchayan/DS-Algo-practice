@@ -257,19 +257,27 @@ public class Tree {
 
     }
 
-    public static class dia{
+    public static class diaPair{
         int dia = 0;
         int hei = 0;
 
-        dia(int dia,int hei){
-
+        diaPair(int dia,int hei){
+            this.dia = dia;
+            this.hei = hei;
         }
     }
 
-    public static int diameter02(Node node){
-        if(node==null) return -1;
+    public static diaPair diameter02(Node node){
+        if (node == null) return new diaPair(0, -1);
 
-        return 0;
+        diaPair lr = diameter02(node.left); // left result
+        diaPair rr = diameter02(node.right); // right result
+
+        diaPair myRes = new diaPair(0, -1);
+        myRes.dia = Math.max(Math.max(lr.dia, rr.dia), (lr.hei + rr.hei + 2));
+        myRes.hei = Math.max(lr.hei, rr.hei) + 1;
+
+        return myRes;
     }
 
     public static void set2() {
@@ -282,7 +290,9 @@ public class Tree {
         // allNodesKaway02(root, 50, 5);
 
         System.out.println(diameter01(root));
-        System.out.println(diameter02(root));
+        System.out.println(diameter02(root).dia);
+        
+      //  System.out.println(diameter02(root).hei);
     }
 
     public static void set1() {
