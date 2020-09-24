@@ -53,6 +53,7 @@ public class Tree {
                 -1 };
         root = preConstruct(arr);
         display(root);
+        System.out.println();
     }
 
     // Basics
@@ -235,15 +236,53 @@ public class Tree {
         return -1;
 
     }
+    
+    // Diameter of a Binary Tree ==============================================================================
+    // 2 solutions possible -- O(n**2) diameter01 and O(n) diameter02
+    
+    // In diameter01 we are computing Left height and Right height seperately  
+
+    public static int diameter01(Node node){
+        if(node==null) return 0;
+
+        int lh = height(node.left);
+        int rh = height(node.right);
+
+        int ld = diameter01(node.left);
+        int rd = diameter01(node.right);
+        
+        int currDia = lh+rh+2;
+
+        return Math.max(currDia, Math.max(ld, rd));
+
+    }
+
+    public static class dia{
+        int dia = 0;
+        int hei = 0;
+
+        dia(int dia,int hei){
+
+        }
+    }
+
+    public static int diameter02(Node node){
+        if(node==null) return -1;
+
+        return 0;
+    }
 
     public static void set2() {
         // lets code for allNodesKaway
-        System.out.println();
-        allNodesKaway01(root, 50, 5);
+        // System.out.println();
+        // allNodesKaway01(root, 50, 5);
 
-        System.out.println();
+        // System.out.println();
 
-        allNodesKaway02(root, 50, 5);
+        // allNodesKaway02(root, 50, 5);
+
+        System.out.println(diameter01(root));
+        System.out.println(diameter02(root));
     }
 
     public static void set1() {
