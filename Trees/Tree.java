@@ -191,30 +191,34 @@ public class Tree {
         ArrayList<Node> path = new ArrayList<>();
         rootToNodePath01(root, path, target);
 
-        for(int i=0;i<path.size();i++){
-            if((K-i)<0) break;
-            if(i==0)
-                kDown(path.get(i),K-i,null);
+        for (int i = 0; i < path.size(); i++) {
+            if ((K - i) < 0)
+                break;
+            if (i == 0)
+                kDown(path.get(i), K - i, null);
             else
-                kDown(path.get(i),K-i,path.get(i-1));
-            
+                kDown(path.get(i), K - i, path.get(i - 1));
+
         }
     }
 
-    public static void kDown(Node node,int K,Node blocked){
-        if(node==null || node==blocked) return;
-        if(K<0) return;
-        if(K==0) {
-            System.out.println(node.data+" ");
+    public static void kDown(Node node, int K, Node blocked) {
+        if (node == null || node == blocked)
+            return;
+        if (K < 0)
+            return;
+        if (K == 0) {
+            System.out.println(node.data + " ");
             return;
         }
 
-        kDown(node.left, K-1, blocked);
-        kDown(node.right, K-1, blocked);
+        kDown(node.left, K - 1, blocked);
+        kDown(node.right, K - 1, blocked);
     }
 
     public static int allNodesKaway02(Node root, int target, int K) {
-        if (root == null) return -1;
+        if (root == null)
+            return -1;
 
         if (root.data == target) {
             kDown(root, K, null);
@@ -223,52 +227,57 @@ public class Tree {
 
         int leftdistance = allNodesKaway02(root.left, target, K);
         if (leftdistance != -1) {
-            if (K - leftdistance >= 0) kDown(root, K - leftdistance, root.left);
+            if (K - leftdistance >= 0)
+                kDown(root, K - leftdistance, root.left);
             return leftdistance + 1;
         }
 
         int rightdistance = allNodesKaway02(root.right, target, K);
         if (rightdistance != -1) {
-            if (K - rightdistance >= 0) kDown(root, K - rightdistance, root.right);
+            if (K - rightdistance >= 0)
+                kDown(root, K - rightdistance, root.right);
             return rightdistance + 1;
         }
 
         return -1;
 
     }
-    
-    // Diameter of a Binary Tree ==============================================================================
-    // 2 solutions possible -- O(n**2) diameter01 and O(n) diameter02
-    
-    // In diameter01 we are computing Left height and Right height seperately  
 
-    public static int diameter01(Node node){
-        if(node==null) return 0;
+    // Diameter of a Binary Tree
+    // ==============================================================================
+    // 2 solutions possible -- O(n**2) diameter01 and O(n) diameter02
+
+    // In diameter01 we are computing Left height and Right height seperately
+
+    public static int diameter01(Node node) {
+        if (node == null)
+            return 0;
 
         int lh = height(node.left);
         int rh = height(node.right);
 
         int ld = diameter01(node.left);
         int rd = diameter01(node.right);
-        
-        int currDia = lh+rh+2;
+
+        int currDia = lh + rh + 2;
 
         return Math.max(currDia, Math.max(ld, rd));
 
     }
 
-    public static class diaPair{
+    public static class diaPair {
         int dia = 0;
         int hei = 0;
 
-        diaPair(int dia,int hei){
+        diaPair(int dia, int hei) {
             this.dia = dia;
             this.hei = hei;
         }
     }
 
-    public static diaPair diameter02(Node node){
-        if (node == null) return new diaPair(0, -1);
+    public static diaPair diameter02(Node node) {
+        if (node == null)
+            return new diaPair(0, -1);
 
         diaPair lr = diameter02(node.left); // left result
         diaPair rr = diameter02(node.right); // right result
@@ -291,8 +300,8 @@ public class Tree {
 
         System.out.println(diameter01(root));
         System.out.println(diameter02(root).dia);
-        
-      //  System.out.println(diameter02(root).hei);
+
+        // System.out.println(diameter02(root).hei);
     }
 
     public static void set1() {
