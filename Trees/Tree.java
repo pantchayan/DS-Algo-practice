@@ -289,6 +289,7 @@ public class Tree {
         return myRes;
     }
 
+    // GFG => Maximum Path Sum between 2 Leaf Nodes **** ==================================================================================
     static int maxPSL = Integer.MIN_VALUE;
     public static int maxPathSumLeaves(Node node){
         if(node==null) return 0;
@@ -306,8 +307,8 @@ public class Tree {
             return Math.max(lh,rh) + node.data;
         }
 
-        return Math.max(lh,rh)+node.data;
-
+        //single child is present
+        return node.left==null?rh+node.data:lh+node.data;
     }
 
     public static void set2() {
@@ -325,8 +326,6 @@ public class Tree {
 
         System.out.println(maxPathSumLeaves(root));
         System.out.println(maxPSL);
-
-
     }
 
     public static void set1() {
