@@ -423,14 +423,28 @@ public class Tree {
 
     // Vertical order =======================================
     // 1. helps us in finding bottom and top view of the tree.
-    
+
+    static int minLeftLevel = Integer.MAX_VALUE;
+    static int maxRightLevel = Integer.MIN_VALUE;
+    public static void width(Node node,int vLevel){
+        if(node==null)return;
+
+        minLeftLevel = Math.min(minLeftLevel,vLevel);
+        maxRightLevel = Math.max(maxRightLevel,vLevel);
+        width(node.left,vLevel-1);
+        width(node.right,vLevel+1);
+    }
+
 
 
 
     public static void levelOrderSet() {
-        levelOrder(root);
-        leftView(root);
-        rightView(root);
+        // levelOrder(root);
+        // leftView(root);
+        // rightView(root);
+
+        width(root, 0);
+        System.out.println(minLeftLevel+" "+maxRightLevel);
     }
 
     public static void pathSumSet() {
