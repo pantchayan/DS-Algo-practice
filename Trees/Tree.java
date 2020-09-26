@@ -289,26 +289,62 @@ public class Tree {
         return myRes;
     }
 
-    // GFG => Maximum Path Sum between 2 Leaf Nodes **** ==================================================================================
+    // PATH SUM SET
+    // =======================================================================================
+
+    // GFG => Maximum Path Sum between 2 Leaf Nodes ****
+    // ==================================================================================
     static int maxPSL = Integer.MIN_VALUE;
-    public static int maxPathSumLeaves(Node node){
-        if(node==null) return 0;
-        if(node.left==null&&node.right==null)return node.data;
 
-        int lh=maxPathSumLeaves(node.left);
-        int rh=maxPathSumLeaves(node.right);
+    public static int maxPathSumLeaves(Node node) {
+        if (node == null)
+            return 0;
+        if (node.left == null && node.right == null)
+            return node.data;
 
-        //PostOrder
-        
-        //both childs present ==> leaf to leaf path is possible
-        if(node.left!=null && node.right!=null){
-            maxPSL = Math.max(maxPSL,lh+rh+node.data);
+        int lh = maxPathSumLeaves(node.left);
+        int rh = maxPathSumLeaves(node.right);
 
-            return Math.max(lh,rh) + node.data;
+        // PostOrder
+
+        // both childs present ==> leaf to leaf path is possible
+        if (node.left != null && node.right != null) {
+            maxPSL = Math.max(maxPSL, lh + rh + node.data);
+
+            return Math.max(lh, rh) + node.data;
         }
 
-        //single child is present
-        return node.left==null?rh+node.data:lh+node.data;
+        // single child is present
+        return node.left == null ? rh + node.data : lh + node.data;
+    }
+
+    // Leet 124- Maximum path sum between any nodes in the Binary Tree
+    // ===============================================================
+
+    static int maxPSN = Integer.MIN_VALUE;
+
+    public static int maxPathSumNodes_(Node node) {
+        if (node == null)
+            return 0;
+
+        int lm = maxPathSumNodes_(node.left);
+        int rm = maxPathSumNodes_(node.right);
+
+        int f = Math.max(lm + node.data, rm + node.data);
+        int f2 = Math.max(f, node.data);
+        int p = Math.max(lm + rm + node.data, f2);
+        maxPSN = Math.max(maxPSN, p);
+
+        return f2;
+    }
+
+    public static void pathSumSet() {
+
+        maxPathSumLeaves(root);
+        System.out.println(maxPSL);
+
+        maxPathSumNodes_(root);
+        System.out.println(maxPSN);
     }
 
     public static void set2() {
@@ -324,8 +360,6 @@ public class Tree {
         // System.out.println(diameter02(root).dia);
         // System.out.println(diameter02(root).hei);
 
-        System.out.println(maxPathSumLeaves(root));
-        System.out.println(maxPSL);
     }
 
     public static void set1() {
@@ -355,8 +389,9 @@ public class Tree {
 
     public static void solve() {
         constructTree();
-        set1();
-        set2();
+        //set1();
+        //set2();
+        pathSumSet();
     }
 
     public static void main(String[] args) {
