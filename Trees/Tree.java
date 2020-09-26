@@ -289,35 +289,26 @@ public class Tree {
         return myRes;
     }
 
+    static int maxPSL = Integer.MIN_VALUE;
+    public static int maxPathSumLeaves(Node node){
+        if(node==null) return 0;
+        if(node.left==null&&node.right==null)return node.data;
 
+        int lh=maxPathSumLeaves(node.left);
+        int rh=maxPathSumLeaves(node.right);
 
-    // Level Order Traversal ======================================================================================
-    // public List<List<Integer>> levelOrder(TreeNode root) {
+        //PostOrder
         
-    //     List<List<Integer>> ans = new ArrayList<>();
-    //     if(root==null) return ans;
-    //     LinkedList<TreeNode> que = new LinkedList<TreeNode>();
-        
-    //     que.addLast(root);
-        
-    //     while(que.size()!=0){
-    //         int size = que.size();
-    //         List<Integer> smallAns = new ArrayList<>();
-    //         while(size-->0){
-    //             TreeNode curr = que.getFirst();
-    //             que.removeFirst();
-                
-    //             smallAns.add(curr.val);
-                
-    //             if(curr.left!=null) que.addLast(curr.left);
-                
-    //             if(curr.right!=null) que.addLast(curr.right);
-                
-    //         }
-    //         ans.add(smallAns);
-    //     }
-    //     return ans;
-    // }
+        //both childs present ==> leaf to leaf path is possible
+        if(node.left!=null && node.right!=null){
+            maxPSL = Math.max(maxPSL,lh+rh+node.data);
+
+            return Math.max(lh,rh) + node.data;
+        }
+
+        return Math.max(lh,rh)+node.data;
+
+    }
 
     public static void set2() {
         // lets code for allNodesKaway
@@ -328,10 +319,14 @@ public class Tree {
 
         // allNodesKaway02(root, 50, 5);
 
-        System.out.println(diameter01(root));
-        System.out.println(diameter02(root).dia);
-
+        // System.out.println(diameter01(root));
+        // System.out.println(diameter02(root).dia);
         // System.out.println(diameter02(root).hei);
+
+        System.out.println(maxPathSumLeaves(root));
+        System.out.println(maxPSL);
+
+
     }
 
     public static void set1() {
