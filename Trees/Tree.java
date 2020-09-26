@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Tree {
 
@@ -338,6 +339,100 @@ public class Tree {
         return f2;
     }
 
+    // LEVEL ORDER SET
+    // ================================================================================================================
+
+    // Level order traversal (BFS in trees)
+    // ============================================================================================================
+    // 1. Iterative
+    // 2. Implemented using queues
+    // 3. (LinkedList{addLast(n),removeFirst(),getFirst()} lib to be used in java).
+    public static void levelOrder(Node node) {
+        // basic bfs algo:
+        // 1. add source to the queue
+        // 2. while size of queue !=0
+        // 2.1 pop Node --> (currNode)
+        // 2.2 add all the child of the currNode to queue
+
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+
+        // No need of visited array here as the tree is rooted. (unlike graphs)
+        int level = 0;
+        while (que.size() != 0) {
+            int size = que.size();
+            System.out.println();
+            System.out.print(level++ + "-> ");
+            while (size-- > 0) {
+                Node curr = que.getFirst();
+                que.removeFirst();
+                System.out.print(curr.data + " ");
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
+            }
+        }
+        System.out.println();
+    }
+
+    // Left view
+    // ===============================================================================
+
+    public static void leftView(Node node) {
+        System.out.println("Left view");
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+        while (que.size() != 0) {
+            int size = que.size();
+            System.out.println(que.getFirst().data);
+            while (size-- > 0) {
+                Node curr = que.getFirst();
+                que.removeFirst();
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
+            }
+        }
+    }
+
+    // Right view
+    // ===============================================================================
+
+    public static void rightView(Node node) {
+        System.out.println("Right view");
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+        while (que.size() != 0) {
+            int size = que.size();
+            System.out.println(que.getLast().data);
+            while (size-- > 0) {
+                Node curr = que.getFirst();
+                que.removeFirst();
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
+            }
+        }
+    }
+
+    // Vertical order =======================================
+    // 1. helps us in finding bottom and top view of the tree.
+    
+
+
+
+    public static void levelOrderSet() {
+        levelOrder(root);
+        leftView(root);
+        rightView(root);
+    }
+
     public static void pathSumSet() {
 
         maxPathSumLeaves(root);
@@ -389,9 +484,10 @@ public class Tree {
 
     public static void solve() {
         constructTree();
-        //set1();
-        //set2();
-        pathSumSet();
+        // set1();
+        // set2();
+        // pathSumSet();
+        levelOrderSet();
     }
 
     public static void main(String[] args) {
