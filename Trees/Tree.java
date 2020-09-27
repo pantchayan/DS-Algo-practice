@@ -447,7 +447,7 @@ public class Tree {
         }
     }
 
-    public static void verticalOrder(Node node) {
+    public static ArrayList<ArrayList<Integer>> verticalOrder(Node node) {
         width(node, 0);
         int n = maxRightLevel - minLeftLevel + 1;
 
@@ -477,6 +477,23 @@ public class Tree {
             System.out.println(ans.get(i));
         }
         System.out.println();
+        return ans;
+    }
+
+    public static void topView(Node node) {
+        ArrayList<ArrayList<Integer>> vo = verticalOrder(node);
+
+        for (ArrayList<Integer> col : vo) {
+            System.out.print(col.get(0) + " ");
+        }
+    }
+
+    public static void bottomView(Node node) {
+        ArrayList<ArrayList<Integer>> vo = verticalOrder(node);
+
+        for (ArrayList<Integer> col : vo) {
+            System.out.print(col.get(col.size() - 1) + " ");
+        }
     }
 
     public static void levelOrderSet() {
@@ -484,7 +501,10 @@ public class Tree {
         // leftView(root);
         // rightView(root);
 
-        verticalOrder(root);
+        topView(root);
+        bottomView(root);
+
+        // Diagonal view,
     }
 
     public static void pathSumSet() {
