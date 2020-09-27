@@ -480,6 +480,9 @@ public class Tree {
         return ans;
     }
 
+    // Top view
+    // ========================================================================================
+
     public static void topView(Node node) {
         ArrayList<ArrayList<Integer>> vo = verticalOrder(node);
 
@@ -487,6 +490,9 @@ public class Tree {
             System.out.print(col.get(0) + " ");
         }
     }
+
+    // Bottom view
+    // ====================================================================================
 
     public static void bottomView(Node node) {
         ArrayList<ArrayList<Integer>> vo = verticalOrder(node);
@@ -496,14 +502,125 @@ public class Tree {
         }
     }
 
+    // Diagonal Order
+    // =================================================================================
+
+    public static class pairDO {
+        Node node;
+        int dl;
+
+        pairDO(Node node, int dl) {
+            this.node = node;
+            this.dl = dl;
+        }
+    }
+
+    static int LeftMinDia = Integer.MAX_VALUE;
+
+    public static void widthDia(Node node, int lev) {
+        if (node == null)
+            return;
+
+        LeftMinDia = Math.min(LeftMinDia, lev);
+
+        widthDia(node.left, lev - 1);
+        widthDia(node.right, lev);
+    }
+
+    public static ArrayList<ArrayList<Integer>> diagonalOrder(Node node) {
+        widthDia(node, 0);
+        int n = -LeftMinDia + 1;
+
+        ArrayList<ArrayList<Integer>> diagOrder = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            diagOrder.add(new ArrayList<Integer>());
+        }
+
+        LinkedList<pairDO> que = new LinkedList<>();
+
+        que.addLast(new pairDO(node, -LeftMinDia));
+
+        while (que.size() != 0) {
+            int size = que.size();
+            while (size-- > 0) {
+                pairDO curr = que.getFirst();
+                que.removeFirst();
+
+                diagOrder.get(curr.dl).add(curr.node.data);
+
+                if (curr.node.left != null)
+                    que.addLast(new pairDO(curr.node.left, curr.dl - 1));
+                if (curr.node.right != null)
+                    que.addLast(new pairDO(curr.node.right, curr.dl));
+            }
+        }
+        int i = 0;
+        for (ArrayList<Integer> a : diagOrder) {
+            System.out.print(i + "-> ");
+            System.out.println(a);
+            i++;
+        }
+
+        return diagOrder;
+    }
+
+    // Diagonal View
+    // =============================================================================================================
+
+    public static void diagonalView(Node node) {
+        ArrayList<ArrayList<Integer>> diagOrder = diagonalOrder(node);
+
+        for (ArrayList<Integer> a : diagOrder) {
+            System.out.print(a.get(0) + ", ");
+        }
+        System.out.println();
+    }
+
+    // Diagonal Sum
+    // =====================================================================================================================
+
+    public static void diagonalSum(Node node) {
+        widthDia(node, 0);
+        int n = -LeftMinDia + 1;
+
+        int[] diagOrderSum = new int[n];
+
+        LinkedList<pairDO> que = new LinkedList<>();
+
+        que.addLast(new pairDO(node, -LeftMinDia));
+
+        while (que.size() != 0) {
+            int size = que.size();
+            while (size-- > 0) {
+                pairDO curr = que.getFirst();
+                que.removeFirst();
+
+                diagOrderSum[curr.dl] += curr.node.data;
+
+                if (curr.node.left != null)
+                    que.addLast(new pairDO(curr.node.left, curr.dl - 1));
+                if (curr.node.right != null)
+                    que.addLast(new pairDO(curr.node.right, curr.dl));
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.println(i + "-> " + diagOrderSum[i]);
+        }
+
+    }
+
     public static void levelOrderSet() {
         // levelOrder(root);
         // leftView(root);
         // rightView(root);
 
-        topView(root);
-        bottomView(root);
+        // topView(root);
+        // bottomView(root);
 
+        diagonalView(root);
+
+        diagonalSum(root);
         // Diagonal view, VO sum, Diagonal VO
     }
 
