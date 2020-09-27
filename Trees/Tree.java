@@ -504,7 +504,7 @@ public class Tree {
         topView(root);
         bottomView(root);
 
-        // Diagonal view,
+        // Diagonal view, VO sum, Diagonal VO
     }
 
     public static void pathSumSet() {
