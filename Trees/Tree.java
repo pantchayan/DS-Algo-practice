@@ -426,25 +426,65 @@ public class Tree {
 
     static int minLeftLevel = Integer.MAX_VALUE;
     static int maxRightLevel = Integer.MIN_VALUE;
-    public static void width(Node node,int vLevel){
-        if(node==null)return;
 
-        minLeftLevel = Math.min(minLeftLevel,vLevel);
-        maxRightLevel = Math.max(maxRightLevel,vLevel);
-        width(node.left,vLevel-1);
-        width(node.right,vLevel+1);
+    public static void width(Node node, int vLevel) {
+        if (node == null)
+            return;
+
+        minLeftLevel = Math.min(minLeftLevel, vLevel);
+        maxRightLevel = Math.max(maxRightLevel, vLevel);
+        width(node.left, vLevel - 1);
+        width(node.right, vLevel + 1);
     }
 
+    public static class pairVO {
+        Node node;
+        int vl = 0;
 
+        pairVO(Node node, int vl) {
+            this.node = node;
+            this.vl = vl;
+        }
+    }
 
+    public static void verticalOrder(Node node) {
+        width(node, 0);
+        int n = maxRightLevel - minLeftLevel + 1;
+
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            ans.add(new ArrayList<Integer>());
+        }
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(node, -minLeftLevel));
+
+        while (que.size() != 0) {
+            int size = que.size();
+            while (size-- > 0) {
+                pairVO curr = que.getFirst();
+                que.removeFirst();
+
+                ans.get(curr.vl).add(curr.node.data);
+
+                if (curr.node.left != null)
+                    que.addLast(new pairVO(curr.node.left, curr.vl - 1));
+                if (curr.node.right != null)
+                    que.addLast(new pairVO(curr.node.right, curr.vl + 1));
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            System.out.print(i + "-> ");
+            System.out.println(ans.get(i));
+        }
+        System.out.println();
+    }
 
     public static void levelOrderSet() {
         // levelOrder(root);
         // leftView(root);
         // rightView(root);
 
-        width(root, 0);
-        System.out.println(minLeftLevel+" "+maxRightLevel);
+        verticalOrder(root);
     }
 
     public static void pathSumSet() {
