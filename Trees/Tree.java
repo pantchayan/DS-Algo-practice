@@ -610,6 +610,48 @@ public class Tree {
 
     }
 
+    // Linearlizing/Right skewing/Flattening Binary tree -- (singly ll) 
+    // ==================================================================================
+    // Two solutions are possible for linearizing :
+    //
+    // 1. Level Order using queue --> keep account of previous node + make curr node right
+    //    child of the previous node + make left child of previous node as null.
+    //
+    // 2. In-place algorithm.
+
+    //Solution 1
+    public static void linearize01(Node node){
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+        
+        Node previous = node;
+
+        while(que.size()!=0){
+            int size = que.size();
+            while(size-->0){
+                Node curr = que.getFirst();
+                que.removeFirst();
+
+                if(curr != previous){
+                    previous.right = curr;
+                    previous.left = null;
+                }
+
+                if(curr.left!=null) que.addLast(curr.left);
+                if(curr.right!=null) que.addLast(curr.right);
+
+                previous = curr;
+            }
+        }
+
+    }
+
+    public static void conversionSet() {
+        linearize01(root);
+        display(root);
+    }
+
     public static void levelOrderSet() {
         // levelOrder(root);
         // leftView(root);
@@ -618,9 +660,9 @@ public class Tree {
         // topView(root);
         // bottomView(root);
 
-        diagonalView(root);
+        // diagonalView(root);
 
-        diagonalSum(root);
+        // diagonalSum(root);
         // Diagonal view, VO sum, Diagonal VO
     }
 
@@ -679,6 +721,7 @@ public class Tree {
         // set2();
         // pathSumSet();
         levelOrderSet();
+        conversionSet();
     }
 
     public static void main(String[] args) {
