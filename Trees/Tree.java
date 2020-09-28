@@ -610,36 +610,39 @@ public class Tree {
 
     }
 
-    // Linearlizing/Right skewing/Flattening Binary tree -- (singly ll) 
+    // Linearlizing/Right skewing/Flattening Binary tree -- (singly ll)
     // ==================================================================================
     // Two solutions are possible for linearizing :
     //
-    // 1. Level Order using queue --> keep account of previous node + make curr node right
-    //    child of the previous node + make left child of previous node as null.
+    // 1. Level Order using queue --> keep account of previous node + make curr node
+    // right
+    // child of the previous node + make left child of previous node as null.
     //
     // 2. In-place algorithm.
 
-    //Solution 1
-    public static void linearize01(Node node){
+    // Solution 1
+    public static void linearize01(Node node) {
         LinkedList<Node> que = new LinkedList<>();
 
         que.addLast(node);
-        
+
         Node previous = node;
 
-        while(que.size()!=0){
+        while (que.size() != 0) {
             int size = que.size();
-            while(size-->0){
+            while (size-- > 0) {
                 Node curr = que.getFirst();
                 que.removeFirst();
 
-                if(curr != previous){
+                if (curr != previous) {
                     previous.right = curr;
                     previous.left = null;
                 }
 
-                if(curr.left!=null) que.addLast(curr.left);
-                if(curr.right!=null) que.addLast(curr.right);
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
 
                 previous = curr;
             }
