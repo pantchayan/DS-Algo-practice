@@ -618,7 +618,7 @@ public class Tree {
     // right
     // child of the previous node + make left child of previous node as null.
     //
-    // 2. In-place algorithm.
+    // 2. In-place algorithm. (better + more intiutive)
 
     // Solution 1
     public static void linearize01(Node node) {
@@ -650,8 +650,28 @@ public class Tree {
 
     }
 
+
+    //Solution 2
+    public static void linearize02(Node node){
+        if(node==null) return;
+
+        linearize02(node.left);
+        linearize02(node.right);
+
+        if( node.left!=null){
+            Node tail = node.left;
+            while(tail.right!=null){
+                tail = tail.right;
+            }
+            tail.right = node.right;
+            node.right = node.left;
+            node.left = null;
+        }
+
+    }
+
     public static void conversionSet() {
-        linearize01(root);
+        linearize02(root);
         display(root);
     }
 
