@@ -612,6 +612,7 @@ public class Tree {
 
     // Linearlizing/Right skewing/Flattening Binary tree -- (singly ll)
     // ==================================================================================
+    //
     // Two solutions are possible for linearizing :
     //
     // 1. Level Order using queue --> keep account of previous node + make curr node
@@ -670,9 +671,39 @@ public class Tree {
 
     }
 
+    // Binary Tree to Doubly Linked List conversion ============================================================================
+
+    static Node head = null;
+    static Node prev = null;
+    public static void binaryToDLL(Node node){
+        if(node == null)return;
+
+        binaryToDLL(node.left);
+
+        if(head==null){
+            head = node;
+        }
+        else{
+            node.left = prev;
+            prev.right = node;
+        }
+        prev = node;
+
+        binaryToDLL(node.right);
+    }
+
     public static void conversionSet() {
-        linearize02(root);
-        display(root);
+        // linearize02(root);
+        binaryToDLL(root);
+
+        Node temp = head;
+        while(temp!=null){
+            System.out.print(temp.data+" = ");
+            temp = temp.right;
+        }
+        System.out.println();
+        
+       // display(root);
     }
 
     public static void levelOrderSet() {
