@@ -225,7 +225,24 @@ public class TreeR {
     }
 
 
-    
+    public static int diameter01(Node node) {
+        if (node == null)
+            return 0;
+
+        int lh = height(node.left);
+        int rh = height(node.right);
+
+        int ld = diameter01(node.left);
+        int rd = diameter01(node.right);
+
+        int currDia = lh + rh + 2;
+
+        return Math.max(currDia, Math.max(ld, rd));
+
+    }
+
+
+
 
 
 
@@ -238,8 +255,10 @@ public class TreeR {
         // LCA02(root, 6, 10);
 
         // kDown(root, 2, 2, 0);
-        System.out.println();
-        allNodesKAway(root, 3, 2);
+        // System.out.println();
+        // allNodesKAway(root, 3, 2);
+
+        System.out.println(diameter01(root));
     }
 
 
