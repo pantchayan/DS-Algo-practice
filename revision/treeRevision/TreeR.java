@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 public class TreeR {
     
     public static class Node{
@@ -100,12 +100,106 @@ public class TreeR {
     }
 
     public static int height(Node node){
-        if(node == null) return 0;
+        if(node == null) return -1;
 
         int leftH = height(node.left);
         int rightH = height(node.right);
 
         return Math.max(leftH,rightH)+1;
+    }
+
+
+    public static boolean rootToNode01(Node node, int data, ArrayList<Integer> ans){
+        if(node==null) return false;
+        if(node.data==data){
+            ans.add(node.data);
+            return true;
+        }
+
+        boolean res = false;
+        res = res|| rootToNode01(node.left,data,ans) || rootToNode01(node.right,data,ans);
+        if(res) ans.add(node.data);
+
+        return res;
+    }
+
+
+    public static int LCA01(Node node, int child1, int child2){
+        ArrayList<Integer> path1 = new ArrayList<Integer>();
+        ArrayList<Integer> path2 = new ArrayList<Integer>();
+
+        rootToNode01(node, child1, path1);
+        rootToNode01(node, child2, path2);
+
+        int LCA = path1.get(path1.size()-1);
+
+        int i = path1.size()-1;
+        int j = path2.size()-1;
+
+        while(i>=0 && j>=0){
+            if(path1.get(i)!=path2.get(j)) break;
+
+            LCA = path1.get(i);
+            
+            i--;
+            j--;
+        }
+        return LCA;
+    }
+
+    
+
+    public static boolean LCA02(Node node, int child1, int child2){
+        if(node==null) return false;
+        if(node.data==child1 || node.data==child2) return true;
+
+        boolean left = LCA02(node.left,child1,child2);
+        boolean right = LCA02(node.right, child1, child2);
+
+        if(left && right) System.out.println(node.data);
+        else if(left || right) return true;
+
+        return false;
+    }
+
+// LCA -- RAJNEESH SIR =============================================================================
+
+    static Node LCANode = null;
+    public static boolean lowestCommonAncestor_02(Node root, int p, int q) {
+        if (root == null) return false;
+
+        boolean selfDone = false;
+        if (root.data == p || root.data == q) {
+            selfDone = true;
+        }
+
+        boolean leftDone = lowestCommonAncestor_02(root.left, p, q);
+        if (LCANode != null) return true;
+
+        boolean rightDone = lowestCommonAncestor_02(root.right, p, q);
+        if (LCANode != null) return true;
+
+        if ((selfDone && leftDone) || (selfDone && rightDone) || (leftDone && rightDone))
+            LCANode = root;
+
+
+        return selfDone || leftDone || rightDone;
+    }
+
+
+
+
+
+
+
+
+    public static void set2(){
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+        rootToNode01(root, 8, ans);
+        System.out.println(ans);
+        System.out.println(LCA01(root,10,6));
+
+        LCA02(root, 6, 10);
     }
 
 
@@ -122,13 +216,13 @@ public class TreeR {
         
         System.out.println(find(root,11));
         System.out.println(minimum(root));
-
         System.out.println(height(root));
     }
 
     public static void main(String args[]){
         constructTree();
-        set1();
+        // set1();
+        set2();
     }
 
 }
