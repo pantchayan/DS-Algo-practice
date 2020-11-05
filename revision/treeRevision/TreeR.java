@@ -1,3 +1,4 @@
+
 public class TreeR {
     
     public static class Node{
@@ -92,6 +93,24 @@ public class TreeR {
         return Math.min(Math.min(minimum(node.left),minimum(node.right)),node.data);
     }
 
+    public static int maximum(Node node){
+        if(node==null) return Integer.MIN_VALUE;
+
+        return Math.max(Math.max(maximum(node.left),maximum(node.right)),node.data);
+    }
+
+    public static int height(Node node){
+        if(node == null) return 0;
+
+        int leftH = height(node.left);
+        int rightH = height(node.right);
+
+        return Math.max(leftH,rightH)+1;
+    }
+
+
+
+
 
     public static void set1(){
         inorder(root);
@@ -100,9 +119,11 @@ public class TreeR {
         System.out.println();
         postorder(root);
         System.out.println();
-
+        
         System.out.println(find(root,11));
         System.out.println(minimum(root));
+
+        System.out.println(height(root));
     }
 
     public static void main(String args[]){
