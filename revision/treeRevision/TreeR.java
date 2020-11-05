@@ -188,18 +188,58 @@ public class TreeR {
 
 
 
+    // K down ============================================================================================
+    static boolean flag = false;
+
+    public static void kDown(Node node,int target, int K, int blocked){
+        if(node==null || node.data==blocked) return;
+
+        if(flag) K--;
+        if(K==0){
+            System.out.print(node.data+" ");
+        }
+        if(node.data==target){
+            flag = true;
+        }
+
+        kDown(node.right, target, K, blocked);
+        kDown(node.left, target, K, blocked);
+    }
+
+    public static void allNodesKAway(Node node, int target, int K){
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        rootToNode01(node, target, ans);
+        
+        flag = false;
+        kDown(node, target, K, 0);
+
+        for(int i=1;i<ans.size();i++){
+            if(K-i<0) break;
+            
+            flag = false;
+            kDown(node, ans.get(i), K-i, ans.get(i-1));
+            
+        }
+
+    }
 
 
+    
 
 
 
     public static void set2(){
-        ArrayList<Integer> ans = new ArrayList<Integer>();
-        rootToNode01(root, 8, ans);
-        System.out.println(ans);
-        System.out.println(LCA01(root,10,6));
+        // ArrayList<Integer> ans = new ArrayList<Integer>();
+        // rootToNode01(root, 8, ans);
+        // System.out.println(ans);
+        // System.out.println(LCA01(root,10,6));
 
-        LCA02(root, 6, 10);
+        // LCA02(root, 6, 10);
+
+        // kDown(root, 2, 2, 0);
+        System.out.println();
+        allNodesKAway(root, 3, 2);
     }
 
 
