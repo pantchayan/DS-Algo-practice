@@ -363,7 +363,7 @@ public class TreeR {
 
     }   
  
-    // BFS / Level Order 
+    // BFS / Level Order set ===========================================================================
     
     public static void BFS(Node node){
         LinkedList<Node> que = new LinkedList<>();
@@ -386,6 +386,47 @@ public class TreeR {
     }
 
 
+    public static void leftView(Node node){
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+
+        while(que.size()!=0){
+            int size = que.size();
+            System.out.print(que.getFirst().data+" ");
+            while(size-->0){
+                Node curr = que.getFirst();
+                que.removeFirst();
+
+
+                if(curr.left!=null) que.addLast(curr.left);
+                if(curr.right!=null) que.addLast(curr.right);
+            }
+        }
+        System.out.println();
+    }
+
+    public static void rightView(Node node){
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+
+        while(que.size()!=0){
+            int size = que.size();
+            System.out.print(que.getLast().data+" ");
+            while(size-->0){
+                Node curr = que.getFirst();
+                que.removeFirst();
+
+
+                if(curr.left!=null) que.addLast(curr.left);
+                if(curr.right!=null) que.addLast(curr.right);
+            }
+        }
+        System.out.println();
+    }
+
+
 
 
 
@@ -398,7 +439,9 @@ public class TreeR {
 
 
 
+    public static void levelOrderSet(){
 
+    }
 
 
     public static void pathSumSet(){
@@ -417,9 +460,6 @@ public class TreeR {
 
         pairLS ans = maxPathSumLeaves(root);
         System.out.println(ans.ls+" "+ans.ms);
-
-
-        BFS(root);
     }
 
 
@@ -458,7 +498,8 @@ public class TreeR {
         constructTree();
         // set1();
         // set2();
-        pathSumSet();
+        // pathSumSet();
+        levelOrderSet();
     }
 
 }
