@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.LinkedList;
 
 public class TreeR {
 
@@ -362,6 +362,28 @@ public class TreeR {
         return new pairLS(ls, ms);
 
     }   
+ 
+    // BFS / Level Order 
+    
+    public static void BFS(Node node){
+        LinkedList<Node> que = new LinkedList<>();
+
+        que.addLast(node);
+
+        while(que.size()!=0){
+            int size = que.size();
+            while(size-->0){
+                Node curr = que.getFirst();
+                que.removeFirst();
+
+                System.out.print(curr.data+" ");
+
+                if(curr.left!=null) que.addLast(curr.left);
+                if(curr.right!=null) que.addLast(curr.right);
+            }
+        }
+        System.out.println();
+    }
 
 
 
@@ -394,7 +416,10 @@ public class TreeR {
 
 
         pairLS ans = maxPathSumLeaves(root);
-        System.out.print(ans.ls+" "+ans.ms);
+        System.out.println(ans.ls+" "+ans.ms);
+
+
+        BFS(root);
     }
 
 
