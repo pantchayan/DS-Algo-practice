@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class TreeR {
 
     public static class Node {
@@ -45,7 +46,7 @@ public class TreeR {
     }
 
     public static void constructTree() {
-        int[] preOrdArr = { 1, 2, 4, -1, -1, 5, 8, -1, -1, 9, -1, -1, 3, 6, 10, -1, -1, -1, 7, 11, -1, -1, -1 };
+        int[] preOrdArr = { 1, 2, 4, 10, -1, -1, -1, 5, 8, -1, -1, 9, -1, -1, 3, 6, 10, -1, -1, -1, 7, 11, -1, -1, -1 };
         root = preOrderToTree(preOrdArr);
 
         display(root);
@@ -283,6 +284,120 @@ public class TreeR {
 
     }
 
+    // PATH SUM QUESTIONS =======================================================================================================
+
+    public static boolean pathSum01(Node node, int curr, int sum){
+        if(node==null) return false;
+
+        if(node.left==null  && node.right==null){
+            if(sum==(curr+node.data)) return true;
+            return false;
+        }
+
+        return pathSum01(node.left, curr+node.data, sum)||pathSum01(node.right, curr+node.data, sum);
+    }
+
+
+
+    public static void pathSum02(Node node, int curr, int sum, ArrayList<Integer> smallAns, ArrayList<ArrayList<Integer>> ans){
+        if(node==null) return;
+        
+        if(node.left==null  && node.right==null){
+            if(sum==(curr+node.data)){
+                ArrayList<Integer> temp = new ArrayList<>(smallAns);
+                temp.add(node.data);
+                System.out.println(temp);
+                ans.add(temp);
+            }
+            return;
+        }
+
+        smallAns.add(node.data);
+        pathSum02(node.left, curr+node.data, sum, smallAns,ans);
+        pathSum02(node.right, curr+node.data, sum, smallAns,ans);
+        smallAns.remove(smallAns.size()-1);
+    }
+
+
+    // MAX PATH SUM BETWEEN ROOT TO LEAF ===================================================
+
+    static int maxSum = 0;
+    public static void maxPathSumRootLeaf(Node node,int curr){
+        if(node==null) return;
+        if(node.left==null && node.right==null){
+            maxSum = Math.max(curr+node.data, maxSum);
+        }
+
+        maxPathSumRootLeaf(node.left,curr+node.data);
+        
+        maxPathSumRootLeaf(node.right,curr+node.data);
+    }
+
+
+    // MAX PATH SUM BTW TWO LEAF NODES =====================================================
+
+    public static class pairLS{
+        int ls=0;
+        int ms=0;
+        pairLS(int ls,int ms){
+            this.ls = ls;
+            this.ms = ms;
+        }
+    }
+
+    public static pairLS maxPathSumLeaves(Node node){
+        if(node==null) return new pairLS(0,0);
+        
+        if(node.left==null && node.right==null){
+            return new pairLS(node.data, node.data);
+        }
+
+        pairLS left = maxPathSumLeaves(node.left);
+        pairLS right = maxPathSumLeaves(node.right);
+
+        int ls = Math.max(left.ls,right.ls) + node.data;
+
+        int ms = Math.max(Math.max(left.ms,right.ms), left.ls+right.ls+node.data);
+
+        return new pairLS(ls, ms);
+
+    }   
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    public static void pathSumSet(){
+        // System.out.println(pathSum01(root, 0, 100));
+
+        // ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        // ArrayList<Integer> smallAns = new ArrayList<>();
+
+        // pathSum02(root, 0, 17, smallAns, ans);
+        // System.out.println(smallAns);
+        // System.out.println(ans);
+
+        maxPathSumRootLeaf(root, 0);
+        System.out.println(maxSum);
+
+
+        pairLS ans = maxPathSumLeaves(root);
+        System.out.print(ans.ls+" "+ans.ms);
+    }
+
+
     public static void set2() {
         // ArrayList<Integer> ans = new ArrayList<Integer>();
         // rootToNode01(root, 8, ans);
@@ -317,7 +432,8 @@ public class TreeR {
     public static void main(String args[]) {
         constructTree();
         // set1();
-        set2();
+        // set2();
+        pathSumSet();
     }
 
 }
