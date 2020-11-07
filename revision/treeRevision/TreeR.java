@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-
 public class TreeR {
 
     public static class Node {
@@ -270,6 +269,7 @@ public class TreeR {
             this.dia = dia;
         }
     }
+
     public static pairDH diameter02(Node node) {
         if (node == null) {
             return new pairDH(-1, 0);
@@ -285,26 +285,29 @@ public class TreeR {
 
     }
 
-    // PATH SUM QUESTIONS =======================================================================================================
+    // PATH SUM QUESTIONS
+    // =======================================================================================================
 
-    public static boolean pathSum01(Node node, int curr, int sum){
-        if(node==null) return false;
+    public static boolean pathSum01(Node node, int curr, int sum) {
+        if (node == null)
+            return false;
 
-        if(node.left==null  && node.right==null){
-            if(sum==(curr+node.data)) return true;
+        if (node.left == null && node.right == null) {
+            if (sum == (curr + node.data))
+                return true;
             return false;
         }
 
-        return pathSum01(node.left, curr+node.data, sum)||pathSum01(node.right, curr+node.data, sum);
+        return pathSum01(node.left, curr + node.data, sum) || pathSum01(node.right, curr + node.data, sum);
     }
 
+    public static void pathSum02(Node node, int curr, int sum, ArrayList<Integer> smallAns,
+            ArrayList<ArrayList<Integer>> ans) {
+        if (node == null)
+            return;
 
-
-    public static void pathSum02(Node node, int curr, int sum, ArrayList<Integer> smallAns, ArrayList<ArrayList<Integer>> ans){
-        if(node==null) return;
-        
-        if(node.left==null  && node.right==null){
-            if(sum==(curr+node.data)){
+        if (node.left == null && node.right == null) {
+            if (sum == (curr + node.data)) {
                 ArrayList<Integer> temp = new ArrayList<>(smallAns);
                 temp.add(node.data);
                 System.out.println(temp);
@@ -314,214 +317,224 @@ public class TreeR {
         }
 
         smallAns.add(node.data);
-        pathSum02(node.left, curr+node.data, sum, smallAns,ans);
-        pathSum02(node.right, curr+node.data, sum, smallAns,ans);
-        smallAns.remove(smallAns.size()-1);
+        pathSum02(node.left, curr + node.data, sum, smallAns, ans);
+        pathSum02(node.right, curr + node.data, sum, smallAns, ans);
+        smallAns.remove(smallAns.size() - 1);
     }
 
-
-    // MAX PATH SUM BETWEEN ROOT TO LEAF ===================================================
+    // MAX PATH SUM BETWEEN ROOT TO LEAF
+    // ===================================================
 
     static int maxSum = 0;
-    public static void maxPathSumRootLeaf(Node node,int curr){
-        if(node==null) return;
-        if(node.left==null && node.right==null){
-            maxSum = Math.max(curr+node.data, maxSum);
+
+    public static void maxPathSumRootLeaf(Node node, int curr) {
+        if (node == null)
+            return;
+        if (node.left == null && node.right == null) {
+            maxSum = Math.max(curr + node.data, maxSum);
         }
 
-        maxPathSumRootLeaf(node.left,curr+node.data);
-        
-        maxPathSumRootLeaf(node.right,curr+node.data);
+        maxPathSumRootLeaf(node.left, curr + node.data);
+
+        maxPathSumRootLeaf(node.right, curr + node.data);
     }
 
+    // MAX PATH SUM BTW TWO LEAF NODES
+    // =====================================================
 
-    // MAX PATH SUM BTW TWO LEAF NODES =====================================================
+    public static class pairLS {
+        int ls = 0;
+        int ms = 0;
 
-    public static class pairLS{
-        int ls=0;
-        int ms=0;
-        pairLS(int ls,int ms){
+        pairLS(int ls, int ms) {
             this.ls = ls;
             this.ms = ms;
         }
     }
 
-    public static pairLS maxPathSumLeaves(Node node){
-        if(node==null) return new pairLS(0,0);
-        
-        if(node.left==null && node.right==null){
+    public static pairLS maxPathSumLeaves(Node node) {
+        if (node == null)
+            return new pairLS(0, 0);
+
+        if (node.left == null && node.right == null) {
             return new pairLS(node.data, node.data);
         }
 
         pairLS left = maxPathSumLeaves(node.left);
         pairLS right = maxPathSumLeaves(node.right);
 
-        int ls = Math.max(left.ls,right.ls) + node.data;
+        int ls = Math.max(left.ls, right.ls) + node.data;
 
-        int ms = Math.max(Math.max(left.ms,right.ms), left.ls+right.ls+node.data);
+        int ms = Math.max(Math.max(left.ms, right.ms), left.ls + right.ls + node.data);
 
         return new pairLS(ls, ms);
 
-    }   
- 
-    // BFS / Level Order set ===========================================================================
-    
-    public static void BFS(Node node){
+    }
+
+    // BFS / Level Order set
+    // ===========================================================================
+
+    public static void BFS(Node node) {
         LinkedList<Node> que = new LinkedList<>();
 
         que.addLast(node);
 
-        while(que.size()!=0){
+        while (que.size() != 0) {
             int size = que.size();
-            while(size-->0){
+            while (size-- > 0) {
                 Node curr = que.getFirst();
                 que.removeFirst();
 
-                System.out.print(curr.data+" ");
+                System.out.print(curr.data + " ");
 
-                if(curr.left!=null) que.addLast(curr.left);
-                if(curr.right!=null) que.addLast(curr.right);
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
             }
         }
         System.out.println();
     }
 
-
-    public static void leftView(Node node){
+    public static void leftView(Node node) {
         LinkedList<Node> que = new LinkedList<>();
 
         que.addLast(node);
 
-        while(que.size()!=0){
+        while (que.size() != 0) {
             int size = que.size();
-            System.out.print(que.getFirst().data+" ");
-            while(size-->0){
+            System.out.print(que.getFirst().data + " ");
+            while (size-- > 0) {
                 Node curr = que.getFirst();
                 que.removeFirst();
 
-
-                if(curr.left!=null) que.addLast(curr.left);
-                if(curr.right!=null) que.addLast(curr.right);
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
             }
         }
         System.out.println();
     }
 
-    public static void rightView(Node node){
+    public static void rightView(Node node) {
         LinkedList<Node> que = new LinkedList<>();
 
         que.addLast(node);
 
-        while(que.size()!=0){
+        while (que.size() != 0) {
             int size = que.size();
-            System.out.print(que.getLast().data+" ");
-            while(size-->0){
+            System.out.print(que.getLast().data + " ");
+            while (size-- > 0) {
                 Node curr = que.getFirst();
                 que.removeFirst();
 
-
-                if(curr.left!=null) que.addLast(curr.left);
-                if(curr.right!=null) que.addLast(curr.right);
+                if (curr.left != null)
+                    que.addLast(curr.left);
+                if (curr.right != null)
+                    que.addLast(curr.right);
             }
         }
         System.out.println();
     }
 
-
-
-    // VERTICAL ORDER  =============================================================================================
+    // VERTICAL ORDER
+    // =============================================================================================
 
     static int minLeft = Integer.MAX_VALUE;
     static int maxRight = Integer.MIN_VALUE;
-    public static void width(Node node, int pos){
-        if(node==null) return;
 
-        minLeft = Math.min(pos,minLeft);
-        maxRight = Math.max(pos,maxRight);
+    public static void width(Node node, int pos) {
+        if (node == null)
+            return;
 
-        width(node.left,pos-1);
-        width(node.right,pos+1);
+        minLeft = Math.min(pos, minLeft);
+        maxRight = Math.max(pos, maxRight);
+
+        width(node.left, pos - 1);
+        width(node.right, pos + 1);
 
     }
 
-    public static class pairVO{
+    public static class pairVO {
         Node node;
         int pos = 0;
-        pairVO(Node node,int pos){
-            this.node= node;
-            this.pos = pos;
-        }
-    }
 
-
-    public static void verticalOrder(Node node){
-        width(root, 0);
-        int s = maxRight-minLeft+1;
-
-        System.out.println(s);
-
-        
-        @SuppressWarnings("unchecked")
-        ArrayList<Integer>[] vOrder = new ArrayList[s];
-
-
-        for(int i=0;i<vOrder.length;i++){
-            vOrder[i] = new ArrayList<>();
-        }
-        LinkedList<pairVO> que = new LinkedList<>();
-
-        que.addLast(new pairVO(node,-minLeft));
-
-        while(que.size()!=0){
-            int size = que.size();
-            while(size-->0){
-                pairVO curr = que.getFirst();
-                que.removeFirst();
-
-                vOrder[curr.pos].add(curr.node.data);
-
-                if(curr.node.left!=null) que.addLast(new pairVO(curr.node.left,curr.pos-1));
-                if(curr.node.right!=null) que.addLast(new pairVO(curr.node.right,curr.pos+1));
-                
-            }
-        }
-        int i=0;
-        for(ArrayList<Integer> a: vOrder){
-            System.out.println(i+" -> "+a);
-            i++;
-        }
-
-        System.out.println("TOP VIEW : ");
-        for(ArrayList<Integer> a: vOrder){
-            System.out.print(a.get(0)+" ");
-        }
-
-        System.out.println("\nBOTTOM VIEW : ");
-        for(ArrayList<Integer> a: vOrder){
-            System.out.print(a.get(a.size()-1)+" ");
-        }
-        System.out.println();
-    }
-
-
-    // DIAGONAL ORDER ====================================================================================
-
-    public static class pairDO{
-        Node node;
-        int pos = 0;
-        pairDO(Node node, int pos){
+        pairVO(Node node, int pos) {
             this.node = node;
             this.pos = pos;
         }
     }
 
-    public static void diagonalOrder(Node node){
+    public static void verticalOrder(Node node) {
+        width(root, 0);
+        int s = maxRight - minLeft + 1;
+
+        System.out.println(s);
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer>[] vOrder = new ArrayList[s];
+
+        for (int i = 0; i < vOrder.length; i++) {
+            vOrder[i] = new ArrayList<>();
+        }
+        LinkedList<pairVO> que = new LinkedList<>();
+
+        que.addLast(new pairVO(node, -minLeft));
+
+        while (que.size() != 0) {
+            int size = que.size();
+            while (size-- > 0) {
+                pairVO curr = que.getFirst();
+                que.removeFirst();
+
+                vOrder[curr.pos].add(curr.node.data);
+
+                if (curr.node.left != null)
+                    que.addLast(new pairVO(curr.node.left, curr.pos - 1));
+                if (curr.node.right != null)
+                    que.addLast(new pairVO(curr.node.right, curr.pos + 1));
+
+            }
+        }
+        int i = 0;
+        for (ArrayList<Integer> a : vOrder) {
+            System.out.println(i + " -> " + a);
+            i++;
+        }
+
+        System.out.println("TOP VIEW : ");
+        for (ArrayList<Integer> a : vOrder) {
+            System.out.print(a.get(0) + " ");
+        }
+
+        System.out.println("\nBOTTOM VIEW : ");
+        for (ArrayList<Integer> a : vOrder) {
+            System.out.print(a.get(a.size() - 1) + " ");
+        }
+        System.out.println();
+    }
+
+    // DIAGONAL ORDER
+    // ====================================================================================
+
+    public static class pairDO {
+        Node node;
+        int pos = 0;
+
+        pairDO(Node node, int pos) {
+            this.node = node;
+            this.pos = pos;
+        }
+    }
+
+    public static void diagonalOrder(Node node) {
         width(root, 0);
 
         @SuppressWarnings("unchecked")
-        ArrayList<Integer>[] dOrder = new ArrayList[-minLeft+1];
+        ArrayList<Integer>[] dOrder = new ArrayList[-minLeft + 1];
 
-        for(int i=0;i<dOrder.length;i++){
+        for (int i = 0; i < dOrder.length; i++) {
             dOrder[i] = new ArrayList<>();
         }
 
@@ -529,41 +542,49 @@ public class TreeR {
 
         que.addLast(new pairDO(node, -minLeft));
 
-        while(que.size()!=0){
+        while (que.size() != 0) {
             int size = que.size();
-            while(size-->0){
+            while (size-- > 0) {
                 pairDO curr = que.getFirst();
                 que.removeFirst();
 
                 dOrder[curr.pos].add(curr.node.data);
 
-                if(curr.node.left!=null) que.addLast(new pairDO(curr.node.left,curr.pos-1));
-                if(curr.node.right!=null) que.addLast(new pairDO(curr.node.right,curr.pos));
-                
+                if (curr.node.left != null)
+                    que.addLast(new pairDO(curr.node.left, curr.pos - 1));
+                if (curr.node.right != null)
+                    que.addLast(new pairDO(curr.node.right, curr.pos));
+
             }
         }
 
-        int i=0;
-        for(ArrayList<Integer> a: dOrder){
-            System.out.println(i+" -> "+a);
+        int i = 0;
+        for (ArrayList<Integer> a : dOrder) {
+            System.out.println(i + " -> " + a);
             i++;
         }
 
         System.out.println("DIAGONAL VIEW : ");
 
-        for(ArrayList<Integer> a: dOrder){
-            System.out.print(a.get(0)+" ");
+        for (ArrayList<Integer> a : dOrder) {
+            System.out.print(a.get(0) + " ");
         }
         System.out.println();
     }
-    
 
-    public static void levelOrderSet(){
+    // CONVERSION SET == > TO DLL AND SLL
+    // ============================================================================================
+
+    public static void conversionSet() {
+        // BINARY TREE TO DOUBLY LINKED LIST <INORDER>
+        // BINARY TREE TO SINGLY LINKED LIST <PREORDER>
+    }
+
+    public static void levelOrderSet() {
         diagonalOrder(root);
     }
 
-
-    public static void pathSumSet(){
+    public static void pathSumSet() {
         // System.out.println(pathSum01(root, 0, 100));
 
         // ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
@@ -576,11 +597,9 @@ public class TreeR {
         maxPathSumRootLeaf(root, 0);
         System.out.println(maxSum);
 
-
         pairLS ans = maxPathSumLeaves(root);
-        System.out.println(ans.ls+" "+ans.ms);
+        System.out.println(ans.ls + " " + ans.ms);
     }
-
 
     public static void set2() {
         // ArrayList<Integer> ans = new ArrayList<Integer>();
@@ -615,10 +634,8 @@ public class TreeR {
 
     public static void main(String args[]) {
         constructTree();
-        // set1();
-        // set2();
-        // pathSumSet();
-        levelOrderSet();
+        // levelOrderSet();
+        conversionSet();
     }
 
 }
