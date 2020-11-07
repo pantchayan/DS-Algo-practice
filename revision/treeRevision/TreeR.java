@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+
 public class TreeR {
 
     public static class Node {
@@ -428,19 +429,137 @@ public class TreeR {
 
 
 
+    // VERTICAL ORDER  =============================================================================================
+
+    static int minLeft = Integer.MAX_VALUE;
+    static int maxRight = Integer.MIN_VALUE;
+    public static void width(Node node, int pos){
+        if(node==null) return;
+
+        minLeft = Math.min(pos,minLeft);
+        maxRight = Math.max(pos,maxRight);
+
+        width(node.left,pos-1);
+        width(node.right,pos+1);
+
+    }
+
+    public static class pairVO{
+        Node node;
+        int pos = 0;
+        pairVO(Node node,int pos){
+            this.node= node;
+            this.pos = pos;
+        }
+    }
 
 
+    public static void verticalOrder(Node node){
+        width(root, 0);
+        int s = maxRight-minLeft+1;
+
+        System.out.println(s);
+
+        
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer>[] vOrder = new ArrayList[s];
 
 
+        for(int i=0;i<vOrder.length;i++){
+            vOrder[i] = new ArrayList<>();
+        }
+        LinkedList<pairVO> que = new LinkedList<>();
+
+        que.addLast(new pairVO(node,-minLeft));
+
+        while(que.size()!=0){
+            int size = que.size();
+            while(size-->0){
+                pairVO curr = que.getFirst();
+                que.removeFirst();
+
+                vOrder[curr.pos].add(curr.node.data);
+
+                if(curr.node.left!=null) que.addLast(new pairVO(curr.node.left,curr.pos-1));
+                if(curr.node.right!=null) que.addLast(new pairVO(curr.node.right,curr.pos+1));
+                
+            }
+        }
+        int i=0;
+        for(ArrayList<Integer> a: vOrder){
+            System.out.println(i+" -> "+a);
+            i++;
+        }
+
+        System.out.println("TOP VIEW : ");
+        for(ArrayList<Integer> a: vOrder){
+            System.out.print(a.get(0)+" ");
+        }
+
+        System.out.println("\nBOTTOM VIEW : ");
+        for(ArrayList<Integer> a: vOrder){
+            System.out.print(a.get(a.size()-1)+" ");
+        }
+        System.out.println();
+    }
+
+
+    // DIAGONAL ORDER ====================================================================================
+
+    public static class pairDO{
+        Node node;
+        int pos = 0;
+        pairDO(Node node, int pos){
+            this.node = node;
+            this.pos = pos;
+        }
+    }
+
+    public static void diagonalOrder(Node node){
+        width(root, 0);
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer>[] dOrder = new ArrayList[-minLeft+1];
+
+        for(int i=0;i<dOrder.length;i++){
+            dOrder[i] = new ArrayList<>();
+        }
+
+        LinkedList<pairDO> que = new LinkedList<>();
+
+        que.addLast(new pairDO(node, -minLeft));
+
+        while(que.size()!=0){
+            int size = que.size();
+            while(size-->0){
+                pairDO curr = que.getFirst();
+                que.removeFirst();
+
+                dOrder[curr.pos].add(curr.node.data);
+
+                if(curr.node.left!=null) que.addLast(new pairDO(curr.node.left,curr.pos-1));
+                if(curr.node.right!=null) que.addLast(new pairDO(curr.node.right,curr.pos));
+                
+            }
+        }
+
+        int i=0;
+        for(ArrayList<Integer> a: dOrder){
+            System.out.println(i+" -> "+a);
+            i++;
+        }
+
+        System.out.println("DIAGONAL VIEW : ");
+
+        for(ArrayList<Integer> a: dOrder){
+            System.out.print(a.get(0)+" ");
+        }
+        System.out.println();
+    }
     
 
-
-
-
-
-
     public static void levelOrderSet(){
-
+        diagonalOrder(root);
     }
 
 
