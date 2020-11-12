@@ -12,12 +12,13 @@ public class BST{
 
     static Node root;
 
-    public static Node inOrderToBST(Node node, int[] arr, int high, int low){
+    public static Node inOrderToBST(int[] arr, int high, int low){
         while(low<=high){
             int mid = (high+low)/2;
-            node = new Node(arr[mid]);
-            node.left = inOrderToBST(node.left, arr, mid-1,low);
-            node.right = inOrderToBST(node.right, arr, high, mid+1);
+            Node node = new Node(arr[mid]);
+            node.left = inOrderToBST(arr, mid-1,low);
+            node.right = inOrderToBST(arr, high, mid+1);
+            return node;
         }
         return null;
     }
@@ -46,7 +47,7 @@ public class BST{
         int[] arr = {1,2,3,4,6,7,8,9,10,11};
         int high = arr.length-1;
         int low = 0;
-        inOrderToBST(root , arr, high, low);
+        root = inOrderToBST(arr, high, low);
 
         display(root);
     }
