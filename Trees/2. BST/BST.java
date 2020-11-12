@@ -53,8 +53,64 @@ public class BST{
     }
 
 
+    // Basics
+    // ==================================================================================================================
+
+    public static int size(Node node) {
+        if (node == null)
+            return 0;
+        return size(node.left) + size(node.right) + 1;
+    }
+
+    public static int height(Node node) {
+        if (node == null)
+            return -1;
+        return Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    public static int Maximum(Node node) {
+        if (node.right == null)
+            return node.data;
+        return Maximum(node.right);
+    }
+
+    public static int Minimum(Node node) {
+        if (node.left == null)
+            return node.data;
+        return Minimum(node.left);
+    }
+
+    public static boolean Find(Node node, int data) {
+        if (node == null)
+            return false;
+        if (node.data == data)
+            return true;
+
+        boolean res = false;
+        if(data > node.data){
+            res = res||Find(node.right, data);
+        }
+        if(data < node.data){
+            res = res ||  Find(node.left,data);
+        }
+        return res;
+    }
+
+
+
+
+    public static void basics(){
+        System.out.println(Find(root,8));
+
+        System.out.println(Maximum(root)+" "+Minimum(root));
+    }
+
+
+
+
     public static void solve(){
         constructBST();
+        basics();
     }
 
 
