@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class BST{
 
     public static class Node{
@@ -44,7 +46,7 @@ public class BST{
     public static void constructBST(){
 
         // Convert using Binary Search algorithm .
-        int[] arr = {1,2,3,4,6,7,8,9,10,11};
+        int[] arr = {10,20,30,40,50,60,70,80,90,100,110,120,130};
         int high = arr.length-1;
         int low = 0;
         root = inOrderToBST(arr, high, low);
@@ -96,7 +98,69 @@ public class BST{
         return res;
     }
 
+    // LCA of a BST ====================================================================================== 
 
+    public static int LCAofBST_rec(Node node, int a, int b){
+        if(node==null) return -1;
+
+        if(a<node.data && b<node.data){
+            return LCAofBST_rec(node.left,a,b);
+        }
+        else if(node.data<a && node.data<b){
+            return LCAofBST_rec(node.right,a,b);
+        }
+        else{
+            return node.data;
+        }
+    }
+
+    public static int LCAofBST_ite(Node node, int a, int b){
+        Node curr = node;
+        while(curr!=null){
+            if(b<curr.data){
+                curr = curr.left;
+            }
+            else if(a>curr.data){
+                curr = curr.right;
+            }
+            else{
+                return curr.data; //LCA point 
+            }
+        }
+        return -1; // NO LCA
+    }
+
+    // All data in range (a,b) in ArrayList ========================================================================================
+
+    public static void allDataInRange(Node node, int a, int b, ArrayList<Integer> ans){
+        if(node==null) return;
+
+        allDataInRange(node.left, a, b, ans);
+
+        if(node.data>=a && node.data<=b){
+            ans.add(node.data);
+        }
+
+        allDataInRange(node.right, a, b, ans);
+
+    }
+
+
+    // Leetcode 98 Validate BST =================================================
+
+
+
+
+    public static void set1(){
+        System.out.println(LCAofBST_rec(root,12,4));
+        System.out.println(LCAofBST_ite(root,12,4));
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        allDataInRange(root, 20, 60, ans);
+
+        System.out.println(ans);
+    }
 
 
     public static void basics(){
@@ -105,12 +169,10 @@ public class BST{
         System.out.println(Maximum(root)+" "+Minimum(root));
     }
 
-
-
-
     public static void solve(){
         constructBST();
-        basics();
+        // basics();
+        set1();
     }
 
 
