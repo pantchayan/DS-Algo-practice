@@ -693,6 +693,47 @@ public class Tree {
         binaryToDLL(node.right);
     }
 
+
+    // ALL SOLUTION ============================================================================
+
+    public static class allSolutions{
+        int height =0;
+        int size =0;
+        boolean find = false;
+
+        Node prev = null;
+        Node pred = null;
+        Node succ = null;
+    }
+
+    public static void allSolution(Node node, int level, int data, allSolutions pair){
+        if(node ==null) return;
+        pair.size++;
+        pair.height = Math.max(pair.height,level);
+        if(node.data == data) pair.find = true;
+
+        // Finding predorder pred and succ 
+        if(node.data == data && pair.pred==null){
+            pair.pred = prev;
+        }
+        if(pair.pred!=null && pair.pred.data == data && pair.succ==null){
+            pair.succ = node;
+        }
+        pair.prev = node;
+
+        allSolution(node.left, level+1, data, pair);
+        allSolution(node.right, level+1, data, pair);
+
+
+    }
+
+
+
+
+
+
+
+
     public static void conversionSet() {
         // linearize02(root);
         binaryToDLL(root);
