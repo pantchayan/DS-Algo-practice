@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Main {
+    static Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) {
+        long x = sc.nextLong();
+        long y = sc.nextLong();
+        
+        System.out.println(gcd(x,y));
+        
+        System.out.println((x*y)/gcd(x,y));
+        
+    }
+    static long gcd(long a, long b)
+    {
+        if (a == 0)
+            return b; 
+        return gcd(b % a, a); 
+    }
+}
