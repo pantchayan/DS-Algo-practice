@@ -25,7 +25,54 @@ public class Questions {
         return true;
     }
 
+    //  STRING-COMPRESSION-OFFICIAL ========================================
+// Sample Input
+// wwwwaaadexxxxxx
+// Sample Output
+// wadex
+// w4a3dex6
 
+    public static String compression1(String str) {
+        // write your code here
+        char prev = str.charAt(0);
+
+        String ans = "";
+        ans = ans + prev;
+        for (int i = 1; i < str.length(); i++) {
+            char curr = str.charAt(i);
+            if (curr != prev) {
+                ans += curr;
+                prev = curr;
+            }
+        }
+
+        return ans;
+    }
+
+    public static String compression2(String str) {
+        char prev = str.charAt(0);
+
+        String ans = "";
+        ans = ans + prev;
+
+        int count = 1;
+        for (int i = 1; i < str.length(); i++) {
+            char curr = str.charAt(i);
+            if (curr != prev) {
+                if (count > 1)
+                    ans += count;
+                ans += curr;
+                prev = curr;
+                count = 0;
+            }
+
+            count++;
+        }
+        if (count > 1)
+            ans += count;
+
+        return ans;
+    }
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
