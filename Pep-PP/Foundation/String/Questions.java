@@ -119,6 +119,29 @@ public class Questions {
         return ans;
     }
 
+
+    // REMOVE PRIME  ===========================================
+    
+    public static void solution(ArrayList < Integer > al) {
+        // write your code here
+        for (int i = al.size() - 1; i >= 0; i--) {
+            if (isPrime(al.get(i))) {
+                al.remove(i);
+            }
+        }
+
+    }
+
+    public static boolean isPrime(int n) {
+        for (int fac = 2; fac * fac <= n; fac++) {
+            if (n % fac == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         String str = scn.next();
