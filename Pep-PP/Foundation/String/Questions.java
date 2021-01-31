@@ -25,12 +25,12 @@ public class Questions {
         return true;
     }
 
-    //  STRING-COMPRESSION-OFFICIAL ========================================
-// Sample Input
-// wwwwaaadexxxxxx
-// Sample Output
-// wadex
-// w4a3dex6
+    // STRING-COMPRESSION-OFFICIAL ========================================
+    // Sample Input
+    // wwwwaaadexxxxxx
+    // Sample Output
+    // wadex
+    // w4a3dex6
 
     public static String compression1(String str) {
         // write your code here
@@ -70,6 +70,26 @@ public class Questions {
         }
         if (count > 1)
             ans += count;
+
+        return ans;
+    }
+
+    // TOGGLE-CASE official ===============================================================================
+
+    public static String toggleCase(String str) {
+
+        String ans = "";
+
+        for (int i = 0; i < str.length(); i++) {
+            int asc = (int) str.charAt(i);
+            if (asc >= 65 && asc <= 90) {
+                ans += (char) ((asc - 'A') + 'a');
+            } else if (asc >= 97 && asc <= 122) {
+                ans += (char) ((asc - 'a') + 'A');
+            } else {
+                ans += str.charAt(i);
+            }
+        }
 
         return ans;
     }
