@@ -122,7 +122,7 @@ public class Questions {
 
     // REMOVE PRIME  ===========================================
     
-    public static void solution(ArrayList < Integer > al) {
+    public static void removePrime(ArrayList < Integer > al) {
         // write your code here
         for (int i = al.size() - 1; i >= 0; i--) {
             if (isPrime(al.get(i))) {
