@@ -1,0 +1,4 @@
+10-> 20-> 30-> 40-> 50-> 60-> 70-> NULL
+10 70
+Middle element :40
+Element is : 50
