@@ -87,26 +87,113 @@ public class Questions{
     }
 
     public static void oddEven(LinkedList ll1){
-        Node fwd = ll1.head;
-        Node trav = ll1.head;
-        Node prev = ll1.head;
-        while(trav!=null){  
-            if(trav.data%2!=0){
-                Node temp = trav.next;
-                prev.next = trav;
-                trav.next = fwd;
-                fwd = fwd.next;
-                prev = trav;
+    }
+    // DISPLAY REVERSE USING RECURSION
+    public static void displayReverse(Node head){
+        if(head==null) return;
 
-                trav = temp;
-                continue;
-            }
-            trav = trav.next;
-        }
-
-        ll1.display();
+        displayReverse(head.next);
+        System.out.print(head.data+" ");
     }
 
+    // REVERSE A LL USING RECURSION
+    public static void reverseRecurPtrHelper(Node head){
+        if(head == null){
+            return;
+        }
+
+        reverseRecurPtrHelper(head.next);
+        if(head.next!=null){
+            head.next.next = head;
+        }
+    }
+
+
+    public static void reverseRecursivePtr(LinkedList ll){
+        reverseRecurPtrHelper(ll.head);
+        ll.head.next = null;
+        Node temp = ll.head;
+        ll.head = ll.tail;
+        ll.tail = temp;
+    }
+    
+    // PALINDROME USING RECURSION
+    static Node left;
+    private static boolean isPalindromeHelper(Node head) {
+        if(head==null){
+            return true;
+        } 
+
+        boolean flag = false;
+        
+        flag = isPalindromeHelper(head.next);
+        if(flag){
+            if(left.data == head.data){
+                left = left.next;
+                return true;
+            } 
+            else return false;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    public static void isPalindromic(){
+        LinkedList ll = new LinkedList();
+        ll.insert(1);
+        ll.insert(2);
+        ll.insert(3);
+        ll.insert(3);
+        ll.insert(2);
+        ll.insert(1);
+
+        left = ll.head;
+        if(isPalindromeHelper(ll.head)){
+            System.out.println("YES");
+        }
+        else{
+            System.out.println("NO");
+        }
+    }
+
+
+    // FOLDING LINKEDLIST
+    static Node temp;
+    static int size;
+    public static void foldLLHelper(Node head,int idx){
+        if(head==null) return;
+
+        foldLLHelper(head.next, idx+1);
+
+        if(idx>size/2){
+            Node nbr = temp.next;
+            temp.next = head;
+            head.next = nbr;
+            temp = nbr;
+        }
+        else if(size/2 == idx){
+            head.next = null;
+        }
+    }
+    public static void foldLL(){
+        LinkedList ll = new LinkedList();
+        ll.insert(1);
+        ll.insert(2);
+        ll.insert(3);
+        ll.insert(4);
+        ll.insert(5);
+        ll.insert(6);
+
+        ll.display();
+
+        temp = ll.head;
+        size = ll.size;
+        foldLLHelper(ll.head,0);
+
+        ll.display();
+    }
 
     public static void main(String[] args){
         LinkedList ll1 = new LinkedList();
@@ -123,7 +210,14 @@ public class Questions{
         ll1.display();
         System.out.println(ll1.head.data +" " + ll1.tail.data);
 
-        oddEven(ll1);
+        // oddEven(ll1);
+
+        // displayReverse(ll1.head);
+
+        // reverseRecursivePtr(ll1);
+        // ll1.display();
+
+       foldLL();
         // intersectionMain(ll1);
         // middleElement(ll1.head);
         // kthLastElement(ll1.head, 2);
