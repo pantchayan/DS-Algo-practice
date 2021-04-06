@@ -122,6 +122,25 @@ public class Implementation {
             System.out.println(k + "th Largest Element is : " + ans);
         }
 
+        Node predecessor;
+        Node successor;
+        int state;
+        public void succAndPred(Node node, int val){
+            for(Node child:node.children){
+                if(child.data==val){
+                    state = 1;
+                }
+                else if(state == 0){
+                    predecessor = child;
+                }
+                else if(state == 1){
+                    successor = child;
+                    state++;
+                }
+                succAndPred(child, val);
+            }
+        }
+
     }
 
     public static void Set2(GenericTree tree1) {
@@ -152,8 +171,17 @@ public class Implementation {
 
         tree1.display(tree1.root);
 
-        Set1(tree1);
+        // Set1(tree1);
         // Set2(tree1);
+        
+        tree1.successor = null;
+        tree1.predecessor = null;
+        tree1.state = 0;
+        tree1.succAndPred(tree1.root, 30);
+
+        System.out.println("Predecessor : "+tree1.predecessor.data);
+        System.out.println("Successor : "+tree1.successor.data);
+        System.out.println(tree1.state);
     }
 
 }
