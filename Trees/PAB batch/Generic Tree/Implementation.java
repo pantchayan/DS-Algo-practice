@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Stack;
-
 public class Implementation {
     public static class GenericTree {
         Node root;
@@ -48,6 +47,50 @@ public class Implementation {
                 display(child);
             }
         }
+
+        int ceil;
+        int floor;
+        public void ceilAndFloor(Node node, int val){
+
+            if(node.data>val){
+                if(node.data < ceil){
+                    ceil = node.data;
+                }
+            }
+
+            if(node.data<val){
+                if(node.data > floor){
+                    floor = node.data;
+                }
+            }
+
+            for(Node child : node.children){
+                ceilAndFloor(child, val);
+            }
+        }
+
+        public void KthLargest(Node node, int k){
+            int ans = Integer.MAX_VALUE;
+            
+            for(int i=0;i<k;i++){
+                // ceil = Integer.MAX_VALUE;
+                floor = Integer.MIN_VALUE;
+            
+                ceilAndFloor(node, ans);
+                ans = floor;
+            }
+            System.out.println(k+"th Largest Element is : "+ans);
+        }
+    }
+
+    public static void Set2(GenericTree tree1){
+        tree1.ceil = Integer.MAX_VALUE;
+        tree1.floor = Integer.MIN_VALUE;
+        tree1.ceilAndFloor(tree1.root, 120);
+        System.out.println("CEIL : "+tree1.ceil+"\nFLOOR : "+tree1.floor);
+
+
+        tree1.KthLargest(tree1.root, 8);
     }
 
     public static void main(String[] args) {
@@ -58,6 +101,8 @@ public class Implementation {
         tree1.root = tree1.construct(input);
 
         tree1.display(tree1.root);
+
+        Set2(tree1);
     }
 
 }
