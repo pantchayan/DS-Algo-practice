@@ -141,8 +141,44 @@ public class Implementation {
             }
         }
 
+        Node subTreeRoot;
+        int maxSum;
+        public int maxSumSubtree(Node node){
+            int sum = node.data;
+            for(Node child:node.children){
+                sum += maxSumSubtree(child); 
+            }
+            if(sum>maxSum){
+                maxSum = sum;
+                subTreeRoot = node;
+            }
+            return sum;
+        }
+
     }
 
+    // Successor Predecessor
+    // Max Sum Subtree
+    public static void Set3(GenericTree tree1){
+        tree1.successor = null;
+        tree1.predecessor = null;
+        tree1.state = 0;
+        tree1.succAndPred(tree1.root, 30);
+
+        System.out.println("Predecessor : "+tree1.predecessor.data);
+        System.out.println("Successor : "+tree1.successor.data);
+        System.out.println(tree1.state);
+
+        tree1.maxSum = Integer.MIN_VALUE;
+        tree1.subTreeRoot = null;
+        int sum = tree1.maxSumSubtree(tree1.root);
+
+        System.out.println(sum +" " + tree1.maxSum);
+    }
+
+
+    // Ceil Floor
+    // Kth Largest Element
     public static void Set2(GenericTree tree1) {
         tree1.ceil = Integer.MAX_VALUE;
         tree1.floor = Integer.MIN_VALUE;
@@ -152,6 +188,8 @@ public class Implementation {
         tree1.KthLargest(tree1.root, 8);
     }
 
+    // Height of the tree
+    // Diameter of the tree
     public static void Set1(GenericTree tree) {
         int height = tree.height(tree.root);
         System.out.println(height);
@@ -173,15 +211,7 @@ public class Implementation {
 
         // Set1(tree1);
         // Set2(tree1);
-        
-        tree1.successor = null;
-        tree1.predecessor = null;
-        tree1.state = 0;
-        tree1.succAndPred(tree1.root, 30);
-
-        System.out.println("Predecessor : "+tree1.predecessor.data);
-        System.out.println("Successor : "+tree1.successor.data);
-        System.out.println(tree1.state);
+        Set3(tree1);
     }
 
 }
