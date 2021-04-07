@@ -50,6 +50,77 @@ public class Implementation {
             }
         }
 
+        public int size(Node node) {
+            int s = 1;
+            for (Node child : node.children) {
+                s += size(child);
+            }
+            return s;
+        }
+
+        public int max(Node node) {
+            int m = node.data;
+            for (Node child : node.children) {
+                m = Math.max(m, max(child));
+            }
+            return m;
+        }
+
+        public void traversals(Node node) {
+            System.out.println("Node Pre " + node.data);
+            for (Node child : node.children) {
+                System.out.println("Edge Pre " + node.data + "--" + child.data);
+                traversals(child);
+                System.out.println("Edge Post " + node.data + "--" + child.data);
+            }
+            System.out.println("Node Post " + node.data);
+        }
+
+        public boolean find(Node node, int data) {
+            boolean flag = false;
+
+            if (node.data == data)
+                return true;
+            for (Node child : node.children) {
+                flag = flag || find(child, data);
+            }
+
+            return flag;
+        }
+
+        public ArrayList<Integer> nodeToRootPath(Node node, int data){
+            if(node.data==data){
+                ArrayList<Integer> base = new ArrayList<>();
+                base.add(node.data);
+                return base;
+            }
+            ArrayList<Integer> ans = new ArrayList<>();
+            for(Node child:node.children){
+                ArrayList<Integer> smallAns = nodeToRootPath(child, data);
+                if(smallAns.size()>0){
+                    smallAns.add(node.data);
+                }
+                ans.addAll(smallAns);
+            }
+            return ans;
+        }
+
+        public ArrayList<Integer> nodeToRootPath2(Node node, int data){
+            if(node.data==data){
+                ArrayList<Integer> base = new ArrayList<>();
+                base.add(node.data);
+                return base;
+            }
+            for(Node child:node.children){
+                ArrayList<Integer> ans = nodeToRootPath2(child, data);
+                if(ans.size()>0){
+                    ans.add(node.data);
+                    return ans;
+                }
+            }
+            return new ArrayList<>();
+        }
+
         public int height(Node node) {
             // h -> node's height
             // ch -> child's height
@@ -125,15 +196,14 @@ public class Implementation {
         Node predecessor;
         Node successor;
         int state;
-        public void succAndPred(Node node, int val){
-            for(Node child:node.children){
-                if(child.data==val){
+
+        public void succAndPred(Node node, int val) {
+            for (Node child : node.children) {
+                if (child.data == val) {
                     state = 1;
-                }
-                else if(state == 0){
+                } else if (state == 0) {
                     predecessor = child;
-                }
-                else if(state == 1){
+                } else if (state == 1) {
                     successor = child;
                     state++;
                 }
@@ -143,12 +213,13 @@ public class Implementation {
 
         Node subTreeRoot;
         int maxSum;
-        public int maxSumSubtree(Node node){
+
+        public int maxSumSubtree(Node node) {
             int sum = node.data;
-            for(Node child:node.children){
-                sum += maxSumSubtree(child); 
+            for (Node child : node.children) {
+                sum += maxSumSubtree(child);
             }
-            if(sum>maxSum){
+            if (sum > maxSum) {
                 maxSum = sum;
                 subTreeRoot = node;
             }
@@ -157,25 +228,38 @@ public class Implementation {
 
     }
 
+    public static void basic(GenericTree tree1) {
+        // System.out.println("Size of the tree is : " + tree1.size(tree1.root));
+        // System.out.println("Maximum of the tree is : " + tree1.max(tree1.root));
+
+        // tree1.traversals(tree1.root);
+
+        // System.out.println(tree1.find(tree1.root,160));
+        // System.out.println(tree1.find(tree1.root,190));
+
+        System.out.println(tree1.nodeToRootPath(tree1.root, 120));
+        System.out.println(tree1.nodeToRootPath2(tree1.root, 120));
+
+    }
+
     // Successor Predecessor
     // Max Sum Subtree
-    public static void Set3(GenericTree tree1){
+    public static void Set3(GenericTree tree1) {
         tree1.successor = null;
         tree1.predecessor = null;
         tree1.state = 0;
         tree1.succAndPred(tree1.root, 30);
 
-        System.out.println("Predecessor : "+tree1.predecessor.data);
-        System.out.println("Successor : "+tree1.successor.data);
+        System.out.println("Predecessor : " + tree1.predecessor.data);
+        System.out.println("Successor : " + tree1.successor.data);
         System.out.println(tree1.state);
 
         tree1.maxSum = Integer.MIN_VALUE;
         tree1.subTreeRoot = null;
         int sum = tree1.maxSumSubtree(tree1.root);
 
-        System.out.println(sum +" " + tree1.maxSum);
+        System.out.println(sum + " " + tree1.maxSum);
     }
-
 
     // Ceil Floor
     // Kth Largest Element
@@ -196,7 +280,7 @@ public class Implementation {
 
         tree.dia = 0;
         height = tree.diameter(tree.root);
-        System.out.println(height+" "+tree.dia);
+        System.out.println(height + " " + tree.dia);
 
     }
 
@@ -209,9 +293,10 @@ public class Implementation {
 
         tree1.display(tree1.root);
 
+        basic(tree1);
         // Set1(tree1);
         // Set2(tree1);
-        Set3(tree1);
+        // Set3(tree1);
     }
 
 }
