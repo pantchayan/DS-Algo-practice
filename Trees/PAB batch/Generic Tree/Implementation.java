@@ -88,16 +88,16 @@ public class Implementation {
             return flag;
         }
 
-        public ArrayList<Integer> nodeToRootPath(Node node, int data){
-            if(node.data==data){
+        public ArrayList<Integer> nodeToRootPath(Node node, int data) {
+            if (node.data == data) {
                 ArrayList<Integer> base = new ArrayList<>();
                 base.add(node.data);
                 return base;
             }
             ArrayList<Integer> ans = new ArrayList<>();
-            for(Node child:node.children){
+            for (Node child : node.children) {
                 ArrayList<Integer> smallAns = nodeToRootPath(child, data);
-                if(smallAns.size()>0){
+                if (smallAns.size() > 0) {
                     smallAns.add(node.data);
                 }
                 ans.addAll(smallAns);
@@ -105,20 +105,61 @@ public class Implementation {
             return ans;
         }
 
-        public ArrayList<Integer> nodeToRootPath2(Node node, int data){
-            if(node.data==data){
+        public ArrayList<Integer> nodeToRootPath2(Node node, int data) {
+            if (node.data == data) {
                 ArrayList<Integer> base = new ArrayList<>();
                 base.add(node.data);
                 return base;
             }
-            for(Node child:node.children){
+            for (Node child : node.children) {
                 ArrayList<Integer> ans = nodeToRootPath2(child, data);
-                if(ans.size()>0){
+                if (ans.size() > 0) {
                     ans.add(node.data);
                     return ans;
                 }
             }
             return new ArrayList<>();
+        }
+
+        public int lca(Node node, int c1, int c2) {
+            int ans = node.data;
+
+            ArrayList<Integer> path1 = nodeToRootPath2(node, c1);
+            ArrayList<Integer> path2 = nodeToRootPath2(node, c2);
+
+            int i = path1.size() - 1;
+            int j = path2.size() - 1;
+            while (i >= 0 && j >= 0) {
+                if (path1.get(i) == path2.get(j)) {
+                    ans = path1.get(i);
+                } else {
+                    break;
+                }
+                i--;
+                j--;
+            }
+            return ans;
+        }
+
+        public int distanceBetweenNodes(Node node, int d1, int d2) {
+            // int ans = 0;
+
+            ArrayList<Integer> path1 = nodeToRootPath2(node, d1);
+            ArrayList<Integer> path2 = nodeToRootPath2(node, d2);
+
+            int i = path1.size() - 1;
+            int j = path2.size() - 1;
+            while (i >= 0 && j >= 0) {
+                if (path1.get(i) == path2.get(j)) {
+                    i--;
+                    j--;
+                    continue;
+                } 
+                else {
+                    return i+j+2;
+                }
+            }
+            return i+j+2;
         }
 
         public int height(Node node) {
@@ -237,8 +278,12 @@ public class Implementation {
         // System.out.println(tree1.find(tree1.root,160));
         // System.out.println(tree1.find(tree1.root,190));
 
-        System.out.println(tree1.nodeToRootPath(tree1.root, 120));
-        System.out.println(tree1.nodeToRootPath2(tree1.root, 120));
+        // System.out.println(tree1.nodeToRootPath(tree1.root, 120));
+        // System.out.println(tree1.nodeToRootPath2(tree1.root, 120));
+
+        System.out.println("LCA is : " + tree1.lca(tree1.root, 100, 140));
+        
+        System.out.println("Distance is : " + tree1.distanceBetweenNodes(tree1.root, 30, 140));
 
     }
 
