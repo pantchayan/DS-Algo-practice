@@ -154,12 +154,11 @@ public class Implementation {
                     i--;
                     j--;
                     continue;
-                } 
-                else {
-                    return i+j+2;
+                } else {
+                    return i + j + 2;
                 }
             }
-            return i+j+2;
+            return i + j + 2;
         }
 
         public int height(Node node) {
@@ -269,6 +268,10 @@ public class Implementation {
 
     }
 
+    // Size of tree
+    // Maximum
+    // traversals
+    // Find
     public static void basic(GenericTree tree1) {
         // System.out.println("Size of the tree is : " + tree1.size(tree1.root));
         // System.out.println("Maximum of the tree is : " + tree1.max(tree1.root));
@@ -278,11 +281,17 @@ public class Implementation {
         // System.out.println(tree1.find(tree1.root,160));
         // System.out.println(tree1.find(tree1.root,190));
 
+    }
+
+    // Node to root path
+    // LCA using path
+    // Distance between nodes using path
+    public static void Set4(GenericTree tree1) {
+
         // System.out.println(tree1.nodeToRootPath(tree1.root, 120));
         // System.out.println(tree1.nodeToRootPath2(tree1.root, 120));
-
         System.out.println("LCA is : " + tree1.lca(tree1.root, 100, 140));
-        
+
         System.out.println("Distance is : " + tree1.distanceBetweenNodes(tree1.root, 30, 140));
 
     }
