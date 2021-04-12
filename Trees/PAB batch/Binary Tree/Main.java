@@ -149,8 +149,10 @@ public class Main {
         }
 
         public boolean find(Node node, int data) {
-            if(node == null) return false;
-            if(node.data == data) return true;
+            if (node == null)
+                return false;
+            if (node.data == data)
+                return true;
 
             boolean flag = false;
 
@@ -159,31 +161,56 @@ public class Main {
         }
 
         public ArrayList<Integer> nodeToRootPath(Node node, int data) {
-            if(node == null) return new ArrayList<>();
-            if(node.data == data){
+            if (node == null)
+                return new ArrayList<>();
+            if (node.data == data) {
                 ArrayList<Integer> base = new ArrayList<>();
                 base.add(node.data);
                 return base;
             }
 
             ArrayList<Integer> leftAns = nodeToRootPath(node.left, data);
-            if(leftAns.size()>0){
+            if (leftAns.size() > 0) {
                 leftAns.add(node.data);
                 return leftAns;
-            } 
+            }
             ArrayList<Integer> rightAns = nodeToRootPath(node.right, data);
-            if(rightAns.size()>0){
+            if (rightAns.size() > 0) {
                 rightAns.add(node.data);
                 return rightAns;
-            } 
-        
+            }
+
+            return new ArrayList<>();
+
+        }
+
+        public ArrayList<Node> nodeToRootPath2(Node node, int data) {
+            if (node == null)
+                return new ArrayList<>();
+            if (node.data == data) {
+                ArrayList<Node> base = new ArrayList<>();
+                base.add(node);
+                return base;
+            }
+
+            ArrayList<Node> leftAns = nodeToRootPath2(node.left, data);
+            if (leftAns.size() > 0) {
+                leftAns.add(node);
+                return leftAns;
+            }
+            ArrayList<Node> rightAns = nodeToRootPath2(node.right, data);
+            if (rightAns.size() > 0) {
+                rightAns.add(node);
+                return rightAns;
+            }
+
             return new ArrayList<>();
 
         }
 
         public void preOrder(Node node) {
             if (node == null) {
-                System.out.print("NULL" + " ");
+                // System.out.print("NULL" + " ");
                 return;
             }
 
@@ -191,46 +218,152 @@ public class Main {
             preOrder(node.left);
             preOrder(node.right);
         }
-        
+
+        public void postOrder(Node node) {
+            if (node == null) {
+                // System.out.print("NULL" + " ");
+                return;
+            }
+
+            postOrder(node.left);
+            postOrder(node.right);
+            System.out.print(node.data + " ");
+        }
+
+        public void inOrder(Node node) {
+            if (node == null) {
+                // System.out.print("NULL" + " ");
+                return;
+            }
+
+            inOrder(node.left);
+            System.out.print(node.data + " ");
+            inOrder(node.right);
+        }
+
         int dia;
-        public void diameter01(Node node){
-            if(node == null) return;
+
+        public void diameter01(Node node) {
+            if (node == null)
+                return;
 
             int lh = height(node.left);
             int rh = height(node.right);
 
-            if(lh+rh+2>dia){
-                dia = lh+rh+2;
+            if (lh + rh + 2 > dia) {
+                dia = lh + rh + 2;
             }
 
             diameter01(node.left);
             diameter01(node.right);
-        } 
+        }
 
-        public int diameter02(Node node){
-            if(node==null) return -1;
+        public int diameter02(Node node) {
+            if (node == null)
+                return -1;
 
             int lh = diameter02(node.left);
             int rh = diameter02(node.right);
 
-            if(lh+rh+2>dia){
-                dia = lh+rh+2;
+            if (lh + rh + 2 > dia) {
+                dia = lh + rh + 2;
             }
 
-            return Math.max(lh,rh) +1;
+            return Math.max(lh, rh) + 1;
+        }
+
+        public void kDownFromRoot(Node node, int k) {
+            if (k < 0)
+                return;
+            if (node == null)
+                return;
+            if (k == 0) {
+                System.out.print(node.data + " ");
+                return;
+            }
+            kDownFromRoot(node.left, k - 1);
+            kDownFromRoot(node.right, k - 1);
+        }
+
+        // using nodeToRootPath and KDown
+        public void kFarAway01(Node node, int data, int k) {
+            if (node == null)
+                return;
+
+            ArrayList<Node> path = nodeToRootPath2(node, data);
+            int[] dist = new int[path.size()];
+            for (int i = 0; i < dist.length; i++) {
+                dist[i] = k - i;
+            }
+
+            kDownFromRoot(path.get(0), k);
+
+            for (int i = 1; i < path.size(); i++) {
+                Node curr = path.get(i);
+                if (dist[i] == 0) {
+                    System.out.print(curr.data + " ");
+                } else if (path.get(i - 1) == curr.left) {
+                    kDownFromRoot(curr.right, dist[i] - 1);
+                } else {
+                    kDownFromRoot(curr.left, dist[i] - 1);
+                }
+            }
+        }
+
+        public boolean kFarAway02(Node node, int data, int k) {
+            if (node == null)
+                return false;
+
+            if (node.data == data) {
+                kDownFromRoot(node, k);
+                return true;
+            }
+
+            boolean lflag = kFarAway02(node.left, data, k);
+            
+            boolean rflag = kFarAway02(node.right, data, k);
+
+            if (lflag) {
+                k--;
+                kDownFromRoot(node.right, k - 1);
+            }
+            if (rflag) {
+                k--;
+                kDownFromRoot(node.left, k - 1);
+            }
+
+            return lflag || rflag;
+        }
+
+        public void transformToLeftClone(Node node){
+            if(node == null) return;
+
+            Node temp = new Node(node.data);
+            Node leftPtr = node.left;
+            node.left = temp;
+            temp.left = leftPtr;
+            
+            transformToLeftClone(temp.left);
+            transformToLeftClone(node.right);
+
         }
 
     }
 
-    public static void set1(BinaryTree tree){
+    public static void set1(BinaryTree tree) {
         tree.dia = Integer.MIN_VALUE;
         tree.diameter01(tree.root);
-        System.out.println("Diameter is "+tree.dia);
+        System.out.println("Diameter is " + tree.dia);
 
         tree.dia = Integer.MIN_VALUE;
         int height = tree.diameter02(tree.root);
-        System.out.println("Height of the tree :"+height);
-        System.out.println("Diameter is "+tree.dia);
+        System.out.println("Height of the tree :" + height);
+        System.out.println("Diameter is " + tree.dia);
+
+        // tree.kDownFromRoot(tree.root, 3);
+        tree.kFarAway01(tree.root, 50, 1);
+        System.out.println();
+        tree.kFarAway02(tree.root, 50, 1);
     }
 
     public static void basic(BinaryTree tree) {
@@ -239,8 +372,16 @@ public class Main {
         System.out.println("Sum : " + tree.sum(tree.root));
         System.out.println("Size : " + tree.size(tree.root));
 
-        tree.levelOrder01(tree.root);
+        System.out.println("PreOrder : ");
+        tree.preOrder(tree.root);
+        System.out.println("\nInOrder : ");
+        tree.inOrder(tree.root);
+        System.out.println("\nPostOrder : ");
+        tree.postOrder(tree.root);
+        System.out.println();
 
+        System.out.println("Level Order : ");
+        // tree.levelOrder01(tree.root);
         tree.levelOrder02(tree.root);
 
         System.out.println(tree.nodeToRootPath(tree.root, 80));
