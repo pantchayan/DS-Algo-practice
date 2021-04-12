@@ -191,6 +191,46 @@ public class Main {
             preOrder(node.left);
             preOrder(node.right);
         }
+        
+        int dia;
+        public void diameter01(Node node){
+            if(node == null) return;
+
+            int lh = height(node.left);
+            int rh = height(node.right);
+
+            if(lh+rh+2>dia){
+                dia = lh+rh+2;
+            }
+
+            diameter01(node.left);
+            diameter01(node.right);
+        } 
+
+        public int diameter02(Node node){
+            if(node==null) return -1;
+
+            int lh = diameter02(node.left);
+            int rh = diameter02(node.right);
+
+            if(lh+rh+2>dia){
+                dia = lh+rh+2;
+            }
+
+            return Math.max(lh,rh) +1;
+        }
+
+    }
+
+    public static void set1(BinaryTree tree){
+        tree.dia = Integer.MIN_VALUE;
+        tree.diameter01(tree.root);
+        System.out.println("Diameter is "+tree.dia);
+
+        tree.dia = Integer.MIN_VALUE;
+        int height = tree.diameter02(tree.root);
+        System.out.println("Height of the tree :"+height);
+        System.out.println("Diameter is "+tree.dia);
     }
 
     public static void basic(BinaryTree tree) {
@@ -215,6 +255,7 @@ public class Main {
         // tree1.preOrder(tree1.root);
         // System.out.println();
         tree1.display(tree1.root);
-        basic(tree1);
+        // basic(tree1);
+        set1(tree1);
     }
 }
