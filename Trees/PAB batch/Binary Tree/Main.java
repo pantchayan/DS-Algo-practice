@@ -309,7 +309,9 @@ public class Main {
                 }
             }
         }
+
         int k;
+
         public boolean kFarAway02(Node node, int data) {
             if (node == null)
                 return false;
@@ -321,7 +323,7 @@ public class Main {
             }
             boolean lflag = kFarAway02(node.left, data);
             if (lflag) {
-                if(k==0){
+                if (k == 0) {
                     System.out.print(node.data + " ");
                     return true;
                 }
@@ -331,7 +333,7 @@ public class Main {
             }
             boolean rflag = kFarAway02(node.right, data);
             if (rflag) {
-                if(k==0){
+                if (k == 0) {
                     System.out.print(node.data + " ");
                     return true;
                 }
@@ -343,19 +345,56 @@ public class Main {
             return lflag || rflag;
         }
 
-        public void transformToLeftClone(Node node){
-            if(node == null) return;
+        public void transformToLeftClone(Node node) {
+            if (node == null)
+                return;
 
             Node temp = new Node(node.data);
             Node leftPtr = node.left;
             node.left = temp;
             temp.left = leftPtr;
-            
+
             transformToLeftClone(temp.left);
             transformToLeftClone(node.right);
 
         }
 
+        int tilt;
+
+        public int tilt(Node node, int sum) {
+            if (node == null)
+                return 0;
+
+            int lsum = tilt(node.left, sum);
+            int rsum = tilt(node.right, sum);
+
+            tilt += Math.abs(lsum - rsum);
+
+            return lsum + rsum + node.data;
+        }
+
+        boolean bal = true;
+        public int isBalanced(Node node) {
+            if (node == null)
+                return -1;
+            if (!bal)
+                return -1;
+
+            int lh = isBalanced(node.left);
+            int rh = isBalanced(node.right);
+            
+            int diff = Math.abs(lh - rh);
+            if (diff > 1) {
+                bal = false;
+            }
+            return Math.max(lh, rh) + 1;
+        }
+
+    }
+
+    public static void set2(BinaryTree tree) {
+        tree.tilt = 0;
+        System.out.println("Sum: " + tree.tilt(tree.root, 0) + " Tilt: " + tree.tilt);
     }
 
     public static void set1(BinaryTree tree) {
@@ -371,8 +410,9 @@ public class Main {
         // tree.kDownFromRoot(tree.root, 3);
         tree.kFarAway01(tree.root, 50, 2);
         System.out.println();
-        tree.k=2;
+        tree.k = 2;
         tree.kFarAway02(tree.root, 50);
+
     }
 
     public static void basic(BinaryTree tree) {
@@ -406,6 +446,6 @@ public class Main {
         // System.out.println();
         tree1.display(tree1.root);
         // basic(tree1);
-        set1(tree1);
+        set2(tree1);
     }
 }
