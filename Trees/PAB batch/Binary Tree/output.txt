@@ -10,5 +10,5 @@
 Diameter is 6
 Height of the tree :3
 Diameter is 6
-80 20 
-80 
+40 10 
+40 10 

@@ -309,27 +309,35 @@ public class Main {
                 }
             }
         }
-
-        public boolean kFarAway02(Node node, int data, int k) {
+        int k;
+        public boolean kFarAway02(Node node, int data) {
             if (node == null)
                 return false;
 
             if (node.data == data) {
                 kDownFromRoot(node, k);
+                k--;
                 return true;
             }
-
-            boolean lflag = kFarAway02(node.left, data, k);
-            
-            boolean rflag = kFarAway02(node.right, data, k);
-
+            boolean lflag = kFarAway02(node.left, data);
             if (lflag) {
-                k--;
+                if(k==0){
+                    System.out.print(node.data + " ");
+                    return true;
+                }
                 kDownFromRoot(node.right, k - 1);
-            }
-            if (rflag) {
                 k--;
+                return true;
+            }
+            boolean rflag = kFarAway02(node.right, data);
+            if (rflag) {
+                if(k==0){
+                    System.out.print(node.data + " ");
+                    return true;
+                }
                 kDownFromRoot(node.left, k - 1);
+                k--;
+                return true;
             }
 
             return lflag || rflag;
@@ -361,9 +369,10 @@ public class Main {
         System.out.println("Diameter is " + tree.dia);
 
         // tree.kDownFromRoot(tree.root, 3);
-        tree.kFarAway01(tree.root, 50, 1);
+        tree.kFarAway01(tree.root, 50, 2);
         System.out.println();
-        tree.kFarAway02(tree.root, 50, 1);
+        tree.k=2;
+        tree.kFarAway02(tree.root, 50);
     }
 
     public static void basic(BinaryTree tree) {
