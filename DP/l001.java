@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class l001 {
 
     public static void display2D(int[][] arr){

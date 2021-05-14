@@ -390,6 +390,53 @@ public class Main {
             return Math.max(lh, rh) + 1;
         }
 
+        public void iterativePrePostInTraversal(Node node) {
+    // write your code here
+    String in = "";
+    String pre = "";
+    String post = "";
+    
+    Stack<pair> st = new Stack<>();
+    st.push(new pair(node,0));
+    while(st.size()!=0){
+        pair curr = st.peek();
+        if(curr.state==0){
+            //preorder
+            pre += curr.node.data+" ";
+            curr.state++;
+        }
+        else if(curr.state==1){
+            // inclusion of left child
+            if(curr.node.left!=null){
+                st.push(new pair(curr.node.left,0));
+            }
+            
+            curr.state++;
+        }
+        else if(curr.state==2){
+            // inorder
+            // inclusion of right child
+            in += curr.node.data+" ";
+             if(curr.node.right!=null){
+                st.push(new pair(curr.node.right,0));
+            }
+            
+            curr.state++;
+        }
+        else if(curr.state==3){
+            // postorder
+            post+= curr.node.data+" ";
+            st.pop();
+        }
+        
+    }
+    System.out.println(pre);
+    
+    System.out.println(in);
+    
+    System.out.println(post);
+  }
+
     }
 
     public static void set2(BinaryTree tree) {
