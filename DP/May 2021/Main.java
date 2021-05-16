@@ -763,6 +763,74 @@ public class Main {
               }
        }
 
+       public static int zeroOneKnapsackTabular(int bag, int[] values, int[] weights){
+              // Assign Storage and Meaning
+              int[][] dp = new int[values.length+1][bag+1];
+
+              // trivial cases
+              for(int i=0;i<=bag;i++){
+                     dp[0][i]=0; 
+              }
+              for(int i=0;i<=values.length;i++){
+                     dp[i][0]=0;
+              }
+
+              for(int i=1;i<=values.length;i++){
+                     for(int j=1;j<=bag;j++){
+                            int ans = 0;
+                            // it doesn't come
+                            ans = Math.max(ans, dp[i-1][j]);
+                            // it comes
+                            if(j>=weights[i-1]){
+                                   ans = Math.max(ans, values[i-1]+dp[i-1][j-weights[i-1]]);
+                            }
+
+                            dp[i][j] = ans;
+
+                     }      
+              }
+              return dp[values.length][bag];
+       }
+
+       public static int unboundedZeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, int[][] qb) {
+              if (bag == 0 || idx == values.length) {
+                     return 0;
+              }
+              // String key = idx+"-"+bag;
+              if (qb[idx][bag] != 0)
+                     return qb[idx][bag];
+              if (weights[idx] > bag) {
+                     int ans = unboundedZeroOneKnapsackMemo(bag, idx + 1, values, weights, qb);
+                     qb[idx][bag] = ans;
+                     return ans;
+              } else {
+                     int case1 = values[idx] + unboundedZeroOneKnapsackMemo(bag - weights[idx], idx, values, weights, qb);
+                     int case2 = unboundedZeroOneKnapsackMemo(bag, idx + 1, values, weights, qb);
+
+                     int ans = Math.max(case1, case2);
+                     qb[idx][bag] = ans;
+                     return ans;
+              }
+       }
+
+       public static int unboundedZeroOneKnapsackTabular(int bag, int[] values, int[] weights) {
+              // Assign Storage and Meaning
+              int[] dp = new int[bag+1];
+
+              for(int i=1;i<=bag;i++){
+                     for(int j=0;j<values.length;j++){
+                            int currValue = values[j];
+                            int currWeight = weights[j];
+                            if(i-currWeight>=0)
+                                   dp[i] = Math.max(dp[i], currValue+dp[i-currWeight]);
+                     }
+              }
+
+
+
+              return dp[bag];
+       }
+
 
        public static void Set3() {
               // int target = 10;
@@ -812,7 +880,10 @@ public class Main {
               System.out.println(zeroOneKnapsackRecur(bag, 0, values, weights));
 
               System.out.println(zeroOneKnapsackMemo(bag, 0, values, weights, new int[values.length+1][bag+1]));
-              System.out.println(recurSteps + " vs " + memoSteps);
+              // System.out.println(recurSteps + " vs " + memoSteps);
+              System.out.println(zeroOneKnapsackTabular(bag, values, weights));
+
+
 
        }
 
