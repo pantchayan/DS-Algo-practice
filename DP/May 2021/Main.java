@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class Main {
        // Recursive
        public static int fibonacciR(int n) {
@@ -112,6 +114,13 @@ public class Main {
               System.out.println();
        }
 
+       public static void printArr(Integer[] arr) {
+              for (Integer a : arr) {
+                     System.out.print(a + " ");
+              }
+              System.out.println();
+       }
+
        public static void print2DArr(int[][] arr) {
               for (int[] a : arr) {
                      for (int x : a) {
@@ -213,18 +222,21 @@ public class Main {
        // Tabular
        public static int climbStairsVariableMinTab(int n, int[] jumps) {
               // Assign Storage
-              int[] dp = new int[n + 1];
+              Integer[] dp = new Integer[n + 1];
               dp[n] = 0;
 
               // Direction
               for (int i = n - 1; i >= 0; i--) {
                      // Calculate Value
-                     int smallAns = n + 1;
+                     int smallAns = Integer.MAX_VALUE;
                      for (int jump = 1; jump <= jumps[i]; jump++) {
                             if (i + jump <= n) {
-                                   smallAns = Math.min(smallAns, dp[i + jump]);
+                                   if (dp[i + jump] != null)
+                                          smallAns = Math.min(smallAns, dp[i + jump]);
                             }
                      }
+                     if (smallAns == Integer.MAX_VALUE)
+                            continue;
                      dp[i] = smallAns + 1;
               }
               printArr(dp);
@@ -239,6 +251,8 @@ public class Main {
               // Climb stairs
               int n = 10;
               int[] jumps = { 3, 3, 0, 2, 1, 2, 4, 2, 0, 0 };
+              printArr(jumps);
+
               // System.out.println(climbStairsRecur(n, ""));
               // System.out.println();
               // System.out.println(climbStairsMemo(n, new int[n + 1]));
@@ -253,8 +267,7 @@ public class Main {
               // System.out.println(climbStairsVariableTab(n, jumps));
 
               // MINIMUM Climb stairs with variable jumps
-              printArr(jumps);
-              System.out.println(climbStairsVariableMin(0, n, jumps));
+              // System.out.println(climbStairsVariableMin(0, n, jumps));
               System.out.println(climbStairsVariableMemoMin(0, n, jumps, new int[n + 1]));
               printArr(memoArr);
               System.out.println(climbStairsVariableMinTab(n, jumps));
@@ -351,19 +364,20 @@ public class Main {
               return dp[0][0];
        }
 
-       static int recurSteps = 0;
+       static int recurSteps;
+
        public static int getMaxGoldRecur(int[][] mine) {
               int max = Integer.MIN_VALUE;
               for (int i = 0; i < mine.length; i++) {
                      int rowMax = dfsHelper(i, 0, mine);
                      max = Math.max(rowMax, max);
               }
-              System.out.println("Recursion evaluations : "+recurSteps);
+              System.out.println("Recursion evaluations : " + recurSteps);
               return max;
        }
-       
+
        public static int dfsHelper(int r, int c, int[][] mine) {
-              if(c==mine[0].length-1){
+              if (c == mine[0].length - 1) {
                      // right wall
                      return mine[r][c];
               }
@@ -389,7 +403,8 @@ public class Main {
 
        }
 
-       static int memoSteps = 0;
+       static int memoSteps;
+
        public static int getMaxGoldMemo(int[][] mine) {
               int max = Integer.MIN_VALUE;
               int[][] qb = new int[mine.length][mine[0].length];
@@ -412,7 +427,8 @@ public class Main {
                      return mine[r][c];
               }
 
-              if(qb[r][c]!=0) return qb[r][c];
+              if (qb[r][c] != 0)
+                     return qb[r][c];
 
               memoSteps++;
               int gold = Integer.MIN_VALUE;
@@ -437,36 +453,36 @@ public class Main {
 
        }
 
-
-       public static int getMaxGoldTab(int[][] mine){
+       public static int getMaxGoldTab(int[][] mine) {
               int n = mine.length;
               int m = mine[0].length;
 
               // Assign Storage
               int[][] dp = new int[n][m];
 
-              dp[n-1][m-1] = mine[n-1][m-1];
+              dp[n - 1][m - 1] = mine[n - 1][m - 1];
 
               // Direction
-              for (int c = m - 1; c >= 0; c--){
-                     for (int r = n - 1; r >= 0; r--){
+              for (int c = m - 1; c >= 0; c--) {
+                     for (int r = n - 1; r >= 0; r--) {
                             // Value - formulae
-                            if(r==n-1 && c==m-1) continue;
+                            if (r == n - 1 && c == m - 1)
+                                   continue;
 
                             int gold = 0;
                             // right-up
                             if (c + 1 < mine[0].length && r - 1 >= 0) {
-                                   gold = Math.max(gold, dp[r-1][c+1]);
+                                   gold = Math.max(gold, dp[r - 1][c + 1]);
                             }
 
                             // right
                             if (c + 1 < mine[0].length) {
-                                   gold = Math.max(gold, dp[r][c+1]);
+                                   gold = Math.max(gold, dp[r][c + 1]);
                             }
 
                             // right-down
                             if (c + 1 < mine[0].length && r + 1 < mine.length) {
-                                   gold = Math.max(gold, dp[r+1][c+1]);
+                                   gold = Math.max(gold, dp[r + 1][c + 1]);
                             }
 
                             dp[r][c] = gold + mine[r][c];
@@ -474,12 +490,11 @@ public class Main {
               }
               print2DArr(dp);
               int maxRow = Integer.MIN_VALUE;
-              for(int i=0;i<n;i++){
+              for (int i = 0; i < n; i++) {
                      maxRow = Math.max(maxRow, dp[i][0]);
               }
               return maxRow;
-       }      
-
+       }
 
        public static void Set2() {
               // mazepath
@@ -503,9 +518,310 @@ public class Main {
 
        }
 
+       public static boolean TargetSumRecur(int currSum, int target, int idx, int[] arr) {
+              if (currSum > target) {
+                     return false;
+              }
+              if (currSum == target) {
+                     return true;
+              }
+              boolean ans = false;
+              recurSteps++;
+              for (int i = idx; i < arr.length; i++) {
+                     ans = ans || TargetSumRecur(currSum, target, i + 1, arr)
+                                   || TargetSumRecur(currSum + arr[i], target, i + 1, arr);
+              }
+
+              return ans;
+       }
+
+       public static void printBoolean2D(boolean[][] arr) {
+              for (boolean[] a : arr) {
+                     for (boolean x : a) {
+                            System.out.print(x + " ");
+                     }
+                     System.out.println();
+              }
+       }
+
+       public static boolean TargetSumTabular(int[] arr, int target) {
+              // Assign Storage
+              boolean[][] dp = new boolean[arr.length + 1][target + 1];
+              // Meaning -> each cell i,j -> if subset of arr till i-1 can create a sum of j
+              // -> true/false -> 0,1.
+              // example -> 0,0 -> means {} empty subset of arr can make a sum of 0 -> true ->
+              // 1.
+              // -> 3,3 -> means {4,2,7} subset of arr can make a sum of 3 -> false -> 0.
+
+              // trivial case -> first coloumn will be entirely 1 -> as every set has an empty
+              // subset which corresponds to sum == 0 (j).
+              // -> first row will entirely be 0 apart from 0,0.
+              for (int i = 0; i < arr.length + 1; i++) {
+                     dp[i][0] = true;
+              }
+
+              for (int i = 1; i < arr.length + 1; i++) {
+                     for (int j = 1; j < target + 1; j++) {
+                            boolean smallAns = false;
+
+                            smallAns = smallAns || dp[i - 1][j];
+                            if (j >= arr[i - 1]) {
+                                   smallAns = smallAns || dp[i - 1][j - arr[i - 1]];
+                            }
+
+                            dp[i][j] = smallAns;
+                     }
+              }
+
+              printBoolean2D(dp);
+              return dp[arr.length][target];
+
+       }
+
+       public static int coinChangeCombinationRecur(int target, String psf, int idx, int[] coins) {
+              if (target < 0) {
+                     return 0;
+              }
+              if (target == 0) {
+                     // System.out.println(psf);
+                     return 1;
+              }
+
+              recurSteps++;
+              int ans = 0;
+              for (int i = idx; i < coins.length; i++) {
+                     ans += coinChangeCombinationRecur(target - coins[i], psf + coins[i], i, coins);
+              }
+
+              return ans;
+       }
+
+       public static int coinChangeCombinationMemo(int target, int idx, int[] coins, int[][] qb) {
+              if (target < 0) {
+                     return 0;
+              }
+              if (target == 0) {
+                     qb[idx][target] = 1;
+                     return 1;
+              }
+
+              if (qb[idx][target] != -1)
+                     return qb[idx][target];
+
+              memoSteps++;
+              int ans = 0;
+              for (int i = idx; i < coins.length; i++) {
+                     ans += coinChangeCombinationMemo(target - coins[i], i, coins, qb);
+
+              }
+
+              qb[idx][target] = ans;
+              memoMatrix = qb;
+              return ans;
+       }
+
+       public static int coinChangeCombinationTabular(int target, int[] coins) {
+              // Assign Storage and meaning
+              int[] dp = new int[target + 1];
+              dp[0] = 1;
+              // meaning -> cell i represents, number of possible combinations leading to sum
+              // i
+              // for current iteration
+
+              // direction
+
+              // for combinations : 1. iterate through the choices
+              // 2. iretate through the dp
+              // -> we pick the choice and then iterate through the dp and fill in answers
+              for (int i = 0; i < coins.length; i++) {
+                     int currentCoin = coins[i];
+                     for (int j = 1; j <= target; j++) {
+                            if (j - currentCoin >= 0)
+                                   dp[j] += dp[j - currentCoin];
+                     }
+              }
+
+              return dp[target];
+       }
+
+       public static int coinChangePermutationsRecur(int target, String psf, int[] coins) {
+              if (target < 0) {
+                     return 0;
+              }
+              if (target == 0) {
+                     // System.out.println(psf);
+                     return 1;
+              }
+              recurSteps++;
+              int ans = 0;
+              for (int i = 0; i < coins.length; i++) {
+                     ans += coinChangePermutationsRecur(target - coins[i], psf + coins[i], coins);
+              }
+              return ans;
+       }
+
+       public static int coinChangePermutationsMemo(int target, int[] coins, int[] qb) {
+              if (target < 0) {
+                     return 0;
+              }
+              if (target == 0) {
+                     qb[target] = 1;
+                     return 1;
+              }
+              if (qb[target] != 0)
+                     return qb[target];
+
+              memoSteps++;
+              int ans = 0;
+              for (int i = 0; i < coins.length; i++) {
+                     ans += coinChangePermutationsMemo(target - coins[i], coins, qb);
+              }
+
+              qb[target] = ans;
+              memoArr = qb;
+              return ans;
+       }
+
+       public static int coinChangePermutationTabular(int target, int[] coins) {
+              // Assign Storage and meaning
+              int[] dp = new int[target + 1];
+              dp[0] = 1;
+              // meaning -> cell i represents, number of possible combinations leading to sum
+              // i
+              // for current iteration
+
+              // direction
+              // for permutations : evaluate answer for a sum using every choice available
+              for (int j = 1; j <= target; j++) {
+                     for (int i = 0; i < coins.length; i++) {
+                            int currentCoin = coins[i];
+                            if (j - currentCoin >= 0)
+                                   dp[j] += dp[j - currentCoin];
+                     }
+              }
+              printArr(dp);
+              return dp[target];
+       }
+
+       
+       public static int zeroOneKnapsackRecur(int bag, int idx, int[] values, int[] weights){
+              if(bag==0 || idx==values.length){
+                     return 0;
+              }
+              
+              if(weights[idx]>bag){
+                     return zeroOneKnapsackRecur(bag, idx+1, values, weights);
+              }
+              else{
+                     int case1 = values[idx]+zeroOneKnapsackRecur(bag-weights[idx], idx+1, values, weights);
+                     int case2 = zeroOneKnapsackRecur(bag, idx+1, values, weights);
+                     
+
+                     return Math.max(case1, case2);
+              }
+       }
+
+       //  public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, HashMap<String, Integer> qb){
+       //        if(bag==0 || idx==values.length){
+       //               return 0;
+       //        }
+       //        String key = idx+"-"+bag;
+       //        if(qb.containsKey(key)) return qb.get(key);
+       //        if(weights[idx]>bag){
+       //               int ans = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+       //               qb.put(key, ans);
+       //               return ans;
+       //        }
+       //        else{
+       //               int case1 = values[idx]+zeroOneKnapsackMemo(bag-weights[idx], idx+1, values, weights, qb);
+       //               int case2 = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+                     
+       //               int ans = Math.max(case1, case2);
+       //               qb.put(key, ans);
+       //               return ans;
+       //        }
+       // }
+
+       public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, int[][] qb){
+              if(bag==0 || idx==values.length){
+                     return 0;
+              }
+            //   String key = idx+"-"+bag;
+              if(qb[idx][bag]!=0) return qb[idx][bag];
+              if(weights[idx]>bag){
+                     int ans = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+                     qb[idx][bag] = ans;
+                     return ans;
+              }
+              else{
+                     int case1 = values[idx]+zeroOneKnapsackMemo(bag-weights[idx], idx+1, values, weights, qb);
+                     int case2 = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+                     
+                     int ans = Math.max(case1, case2);
+                     qb[idx][bag] = ans;
+                     return ans;
+              }
+       }
+
+
+       public static void Set3() {
+              // int target = 10;
+              // int[] arr = { 4, 2, 7, 1, 3 };
+              // System.out.println(TargetSumRecur(0, target, 0, arr));
+              // System.out.println(recurSteps);
+
+              // System.out.println(TargetSumTabular(arr, target));
+
+              // int[] coins = { 2, 3, 5, 6};
+              // int target = 9;
+              // recurSteps = 0;
+              // System.out.println(coinChangeCombinationRecur(target, "", 0, coins));
+
+              // memoSteps = 0;
+              // int[][] qb = new int[coins.length][target+1];
+              // for(int i=0;i<qb.length;i++){
+              // for(int j=0;j<qb[0].length;j++){
+              // qb[i][j] = -1;
+              // }
+              // }
+              // System.out.println(coinChangeCombinationMemo(target, 0, coins, qb));
+
+              // System.out.println(recurSteps+" vs "+memoSteps);
+
+              // print2DArr(memoMatrix);
+
+              // System.out.println(coinChangeCombinationTabular(target, coins));
+              recurSteps = 0;
+              memoSteps = 0;
+              // System.out.println("Total number of permutations
+              // "+coinChangePermutationsRecur(target,"", coins));
+
+              // System.out.println("Total number of permutations
+              // "+coinChangePermutationsMemo(target, coins, new int[target+1]));
+
+              // System.out.println(recurSteps+" vs "+memoSteps);
+
+              // printArr(memoArr);
+
+              // System.out.println(coinChangePermutationTabular(target, coins));
+
+              int[] values = { 2, 2, 1, 3 };
+              int[] weights = { 6, 4, 5, 1 };
+
+              int bag = 4;
+              System.out.println(zeroOneKnapsackRecur(bag, 0, values, weights));
+
+              System.out.println(zeroOneKnapsackMemo(bag, 0, values, weights, new int[values.length+1][bag+1]));
+              System.out.println(recurSteps + " vs " + memoSteps);
+
+       }
+
        public static void main(String[] args) {
               // Set1();
-              Set2();
+              // Set2();
+
+              // P&C
+              Set3();
 
        }
 }
