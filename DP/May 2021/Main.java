@@ -832,6 +832,44 @@ public class Main {
        }
 
 
+       public static double fractionalKnapsack(int bag, int[] values, int[] weights){
+              double[] frac = new double[values.length];
+
+              for (int i = 0; i < values.length; i++) {
+                     frac[i] = ((double) values[i]) / ((double) weights[i]);
+              }
+
+              double totalValue = 0;
+              int totalWeight = 0;
+              int idx = -1;
+              while (totalWeight <= bag) {
+                     double max = Double.MIN_VALUE;
+                     idx = -1;
+                     for (int i = 0; i < frac.length; i++) {
+                            if (frac[i] > max) {
+                                   max = frac[i];
+                                   idx = i;
+                            }
+                     }
+
+                     if (idx == -1)
+                            return totalValue;
+
+                     frac[idx] = Double.MIN_VALUE;
+                     totalValue += (double) values[idx];
+                     totalWeight += weights[idx];
+              }
+
+              double remainingBag = (double) bag - ((double) totalWeight - (double) weights[idx]);
+              double lastFrac = remainingBag / (double) weights[idx];
+
+              totalValue -= (double) values[idx];
+
+              totalValue += ((double) values[idx]) * lastFrac;
+
+              return totalValue;
+       }
+
        public static void Set3() {
               // int target = 10;
               // int[] arr = { 4, 2, 7, 1, 3 };
@@ -883,8 +921,95 @@ public class Main {
               // System.out.println(recurSteps + " vs " + memoSteps);
               System.out.println(zeroOneKnapsackTabular(bag, values, weights));
 
+              System.out.println(fractionalKnapsack(bag, values, weights));
+
+       }
 
 
+
+
+       public static int countBinaryStringsRecur(int prev, String psf, int n){
+              if (n < 0) {
+                     return 0;
+              }
+              if(n==0){
+                     System.out.println(psf);
+                     return 1;
+              }
+              
+              recurSteps++;
+              if(prev == 0){
+                     return countBinaryStringsRecur(1, psf+1, n-1);
+              }
+              else{
+                     int ans = 0;
+                     ans += countBinaryStringsRecur(0, psf + 0, n - 1);
+                     ans += countBinaryStringsRecur(1, psf + 1, n - 1);
+
+                     return ans;
+              }
+       }
+
+       public static int countBinaryStringsMemo(int prev, int n, int[][] qb) {
+              if (n < 0) {
+                     return 0;
+              }
+              if (n == 0) {
+                     return 1;
+              }      
+
+              if(prev != -1 && qb[prev][n]!=-1) return qb[prev][n];
+
+              memoSteps++;
+              if (prev == 0) {
+                     qb[prev][n] = countBinaryStringsMemo(1, n - 1, qb);
+                     memoMatrix = qb;
+                     return qb[prev][n];
+              } else {
+
+                     int ans = 0;
+                     ans += countBinaryStringsMemo(0,  n - 1, qb);
+                     ans += countBinaryStringsMemo(1,  n - 1, qb);
+                     qb[prev][n]=ans;
+                     memoMatrix = qb;
+                     return ans;
+              }
+       }
+
+       public static int countBinaryStringsTab(int n){
+              int oc0 = 1;
+              int oc1 = 1;
+
+              for(int i=2;i<=n;i++){
+                     int nc0 = oc1;
+                     int nc1 = oc0+oc1;
+
+                     oc1 = nc1;
+                     oc0 = nc0;
+              }
+
+              return (oc0+oc1);
+       }
+
+
+
+
+       public static void Set4(){
+              int n = 15;
+              System.out.println(countBinaryStringsRecur(1,"",n));
+
+              int[][] qb = new int[2][n+1];
+              for(int i=0;i<2;i++){
+                     for(int j=0;j<=n;j++){
+                            qb[i][j] = -1;
+                     }
+              }
+              System.out.println(countBinaryStringsMemo(1, n, qb));
+
+              System.out.println(recurSteps+" vs "+memoSteps);
+              print2DArr(memoMatrix);
+
+              System.out.println(countBinaryStringsTab(n));
        }
 
        public static void main(String[] args) {
@@ -892,7 +1017,10 @@ public class Main {
               // Set2();
 
               // P&C
-              Set3();
+              // Set3();
+
+
+              Set4();
 
        }
 }
