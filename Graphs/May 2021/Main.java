@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main {
 
@@ -405,7 +406,38 @@ public class Main {
 
               ans.add(src);
        }
-       
+
+
+
+       public static void iterativeDFS(int src, ArrayList<Edge>[] graph){
+              Stack<Pair> st = new Stack<>();
+
+              st.push(new Pair(src, ""+src));
+              boolean[] vis = new boolean[graph.length];
+
+              while(st.size()!=0){
+                     Pair curr = st.pop();
+
+                     if(vis[curr.vtx]) continue;
+
+                     String ans = curr.vtx+"@"+curr.path;
+
+                     System.out.println(ans);
+                     vis[curr.vtx] = true;
+
+                     for(Edge e:graph[curr.vtx]){
+                            if(vis[e.nbr]==false){
+                                   st.push(new Pair(e.nbr, curr.path+e.nbr));
+                            }
+                     }
+              }
+
+       }
+
+
+
+
+
        
        public static void Set2(ArrayList<Edge>[] graph) {
               int src = 6;
