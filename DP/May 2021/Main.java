@@ -703,91 +703,90 @@ public class Main {
               return dp[target];
        }
 
-       
-       public static int zeroOneKnapsackRecur(int bag, int idx, int[] values, int[] weights){
-              if(bag==0 || idx==values.length){
+       public static int zeroOneKnapsackRecur(int bag, int idx, int[] values, int[] weights) {
+              if (bag == 0 || idx == values.length) {
                      return 0;
               }
-              
-              if(weights[idx]>bag){
-                     return zeroOneKnapsackRecur(bag, idx+1, values, weights);
-              }
-              else{
-                     int case1 = values[idx]+zeroOneKnapsackRecur(bag-weights[idx], idx+1, values, weights);
-                     int case2 = zeroOneKnapsackRecur(bag, idx+1, values, weights);
-                     
+
+              if (weights[idx] > bag) {
+                     return zeroOneKnapsackRecur(bag, idx + 1, values, weights);
+              } else {
+                     int case1 = values[idx] + zeroOneKnapsackRecur(bag - weights[idx], idx + 1, values, weights);
+                     int case2 = zeroOneKnapsackRecur(bag, idx + 1, values, weights);
 
                      return Math.max(case1, case2);
               }
        }
 
-       //  public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, HashMap<String, Integer> qb){
-       //        if(bag==0 || idx==values.length){
-       //               return 0;
-       //        }
-       //        String key = idx+"-"+bag;
-       //        if(qb.containsKey(key)) return qb.get(key);
-       //        if(weights[idx]>bag){
-       //               int ans = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
-       //               qb.put(key, ans);
-       //               return ans;
-       //        }
-       //        else{
-       //               int case1 = values[idx]+zeroOneKnapsackMemo(bag-weights[idx], idx+1, values, weights, qb);
-       //               int case2 = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
-                     
-       //               int ans = Math.max(case1, case2);
-       //               qb.put(key, ans);
-       //               return ans;
-       //        }
+       // public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[]
+       // weights, HashMap<String, Integer> qb){
+       // if(bag==0 || idx==values.length){
+       // return 0;
+       // }
+       // String key = idx+"-"+bag;
+       // if(qb.containsKey(key)) return qb.get(key);
+       // if(weights[idx]>bag){
+       // int ans = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+       // qb.put(key, ans);
+       // return ans;
+       // }
+       // else{
+       // int case1 = values[idx]+zeroOneKnapsackMemo(bag-weights[idx], idx+1, values,
+       // weights, qb);
+       // int case2 = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+
+       // int ans = Math.max(case1, case2);
+       // qb.put(key, ans);
+       // return ans;
+       // }
        // }
 
-       public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, int[][] qb){
-              if(bag==0 || idx==values.length){
+       public static int zeroOneKnapsackMemo(int bag, int idx, int[] values, int[] weights, int[][] qb) {
+              if (bag == 0 || idx == values.length) {
                      return 0;
               }
-            //   String key = idx+"-"+bag;
-              if(qb[idx][bag]!=0) return qb[idx][bag];
-              if(weights[idx]>bag){
-                     int ans = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
+              // String key = idx+"-"+bag;
+              if (qb[idx][bag] != 0)
+                     return qb[idx][bag];
+              if (weights[idx] > bag) {
+                     int ans = zeroOneKnapsackMemo(bag, idx + 1, values, weights, qb);
                      qb[idx][bag] = ans;
                      return ans;
-              }
-              else{
-                     int case1 = values[idx]+zeroOneKnapsackMemo(bag-weights[idx], idx+1, values, weights, qb);
-                     int case2 = zeroOneKnapsackMemo(bag, idx+1, values, weights, qb);
-                     
+              } else {
+                     int case1 = values[idx] + zeroOneKnapsackMemo(bag - weights[idx], idx + 1, values, weights, qb);
+                     int case2 = zeroOneKnapsackMemo(bag, idx + 1, values, weights, qb);
+
                      int ans = Math.max(case1, case2);
                      qb[idx][bag] = ans;
                      return ans;
               }
        }
 
-       public static int zeroOneKnapsackTabular(int bag, int[] values, int[] weights){
+       public static int zeroOneKnapsackTabular(int bag, int[] values, int[] weights) {
               // Assign Storage and Meaning
-              int[][] dp = new int[values.length+1][bag+1];
+              int[][] dp = new int[values.length + 1][bag + 1];
 
               // trivial cases
-              for(int i=0;i<=bag;i++){
-                     dp[0][i]=0; 
+              for (int i = 0; i <= bag; i++) {
+                     dp[0][i] = 0;
               }
-              for(int i=0;i<=values.length;i++){
-                     dp[i][0]=0;
+              for (int i = 0; i <= values.length; i++) {
+                     dp[i][0] = 0;
               }
 
-              for(int i=1;i<=values.length;i++){
-                     for(int j=1;j<=bag;j++){
+              for (int i = 1; i <= values.length; i++) {
+                     for (int j = 1; j <= bag; j++) {
                             int ans = 0;
                             // it doesn't come
-                            ans = Math.max(ans, dp[i-1][j]);
+                            ans = Math.max(ans, dp[i - 1][j]);
                             // it comes
-                            if(j>=weights[i-1]){
-                                   ans = Math.max(ans, values[i-1]+dp[i-1][j-weights[i-1]]);
+                            if (j >= weights[i - 1]) {
+                                   ans = Math.max(ans, values[i - 1] + dp[i - 1][j - weights[i - 1]]);
                             }
 
                             dp[i][j] = ans;
 
-                     }      
+                     }
               }
               return dp[values.length][bag];
        }
@@ -804,7 +803,8 @@ public class Main {
                      qb[idx][bag] = ans;
                      return ans;
               } else {
-                     int case1 = values[idx] + unboundedZeroOneKnapsackMemo(bag - weights[idx], idx, values, weights, qb);
+                     int case1 = values[idx]
+                                   + unboundedZeroOneKnapsackMemo(bag - weights[idx], idx, values, weights, qb);
                      int case2 = unboundedZeroOneKnapsackMemo(bag, idx + 1, values, weights, qb);
 
                      int ans = Math.max(case1, case2);
@@ -815,24 +815,21 @@ public class Main {
 
        public static int unboundedZeroOneKnapsackTabular(int bag, int[] values, int[] weights) {
               // Assign Storage and Meaning
-              int[] dp = new int[bag+1];
+              int[] dp = new int[bag + 1];
 
-              for(int i=1;i<=bag;i++){
-                     for(int j=0;j<values.length;j++){
+              for (int i = 1; i <= bag; i++) {
+                     for (int j = 0; j < values.length; j++) {
                             int currValue = values[j];
                             int currWeight = weights[j];
-                            if(i-currWeight>=0)
-                                   dp[i] = Math.max(dp[i], currValue+dp[i-currWeight]);
+                            if (i - currWeight >= 0)
+                                   dp[i] = Math.max(dp[i], currValue + dp[i - currWeight]);
                      }
               }
-
-
 
               return dp[bag];
        }
 
-
-       public static double fractionalKnapsack(int bag, int[] values, int[] weights){
+       public static double fractionalKnapsack(int bag, int[] values, int[] weights) {
               double[] frac = new double[values.length];
 
               for (int i = 0; i < values.length; i++) {
@@ -917,7 +914,7 @@ public class Main {
               int bag = 4;
               System.out.println(zeroOneKnapsackRecur(bag, 0, values, weights));
 
-              System.out.println(zeroOneKnapsackMemo(bag, 0, values, weights, new int[values.length+1][bag+1]));
+              System.out.println(zeroOneKnapsackMemo(bag, 0, values, weights, new int[values.length + 1][bag + 1]));
               // System.out.println(recurSteps + " vs " + memoSteps);
               System.out.println(zeroOneKnapsackTabular(bag, values, weights));
 
@@ -925,23 +922,19 @@ public class Main {
 
        }
 
-
-
-
-       public static int countBinaryStringsRecur(int prev, String psf, int n){
+       public static int countBinaryStringsRecur(int prev, String psf, int n) {
               if (n < 0) {
                      return 0;
               }
-              if(n==0){
+              if (n == 0) {
                      System.out.println(psf);
                      return 1;
               }
-              
+
               recurSteps++;
-              if(prev == 0){
-                     return countBinaryStringsRecur(1, psf+1, n-1);
-              }
-              else{
+              if (prev == 0) {
+                     return countBinaryStringsRecur(1, psf + 1, n - 1);
+              } else {
                      int ans = 0;
                      ans += countBinaryStringsRecur(0, psf + 0, n - 1);
                      ans += countBinaryStringsRecur(1, psf + 1, n - 1);
@@ -956,9 +949,10 @@ public class Main {
               }
               if (n == 0) {
                      return 1;
-              }      
+              }
 
-              if(prev != -1 && qb[prev][n]!=-1) return qb[prev][n];
+              if (prev != -1 && qb[prev][n] != -1)
+                     return qb[prev][n];
 
               memoSteps++;
               if (prev == 0) {
@@ -968,48 +962,203 @@ public class Main {
               } else {
 
                      int ans = 0;
-                     ans += countBinaryStringsMemo(0,  n - 1, qb);
-                     ans += countBinaryStringsMemo(1,  n - 1, qb);
-                     qb[prev][n]=ans;
+                     ans += countBinaryStringsMemo(0, n - 1, qb);
+                     ans += countBinaryStringsMemo(1, n - 1, qb);
+                     qb[prev][n] = ans;
                      memoMatrix = qb;
                      return ans;
               }
        }
 
-       public static int countBinaryStringsTab(int n){
+       public static int countBinaryStringsTab(int n) {
               int oc0 = 1;
               int oc1 = 1;
 
-              for(int i=2;i<=n;i++){
+              for (int i = 2; i <= n; i++) {
                      int nc0 = oc1;
-                     int nc1 = oc0+oc1;
+                     int nc1 = oc0 + oc1;
 
                      oc1 = nc1;
                      oc0 = nc0;
               }
 
-              return (oc0+oc1);
+              return (oc0 + oc1);
+       }
+
+       public static int countEncodingsRecur(String asf, String num) {
+
+              if (num.length() == 0) {
+                     System.out.println(asf + " " + num);
+                     return 1;
+              }
+              if (num.charAt(0) == '0') {
+                     return 0;
+              }
+
+              int count = 0;
+              char ans = (char) (num.charAt(0) - '0' + 96);
+
+              count += countEncodingsRecur(asf + ans, num.substring(1));
+              recurSteps++;
+              if (num.length() > 1) {
+                     char tens = num.charAt(0);
+                     char ones = num.charAt(1);
+
+                     int asc = (tens - '0') * 10 + (ones - '0');
+                     if (asc <= 26 && asc >= 1) {
+                            char a = (char) (asc + 96);
+                            count += countEncodingsRecur(asf + a, num.substring(2));
+                     }
+              }
+              return count;
+       }
+
+       public static int countEncodingsMemo(String asf, String num, int[] qb) {
+
+              if (num.length() == 0) {
+                     qb[num.length()] = 1;
+                     return 1;
+              }
+              if (num.charAt(0) == '0') {
+                     return 0;
+              }
+
+              if (qb[num.length()] != 0)
+                     return qb[num.length()];
+              int count = 0;
+              char ans = (char) (num.charAt(0) - '0' + 96);
+
+              count += countEncodingsMemo(asf + ans, num.substring(1), qb);
+              memoSteps++;
+              if (num.length() > 1) {
+                     char tens = num.charAt(0);
+                     char ones = num.charAt(1);
+
+                     int asc = (tens - '0') * 10 + (ones - '0');
+                     if (asc <= 26 && asc >= 1) {
+                            char a = (char) (asc + 96);
+                            count += countEncodingsMemo(asf + a, num.substring(2), qb);
+                     }
+              }
+
+              qb[num.length()] = count;
+
+              memoArr = qb;
+              return count;
+       }
+
+       public static int abcSubsequences(String s) {
+              int aCount = 0;
+              int bCount = 0;
+              int cCount = 0;
+
+              for (int i = 0; i < s.length(); i++) {
+                     char c = s.charAt(i);
+                     if (c == 'a') {
+                            aCount = 1 + 2 * aCount;
+                     }
+                     if (c == 'b') {
+                            bCount = aCount + 2 * bCount;
+                     }
+                     if (c == 'c') {
+                            cCount = bCount + 2 * cCount;
+                     }
+              }
+
+              return cCount;
+       }
+
+       public static void Set4() {
+              // int n = 15;
+              // System.out.println(countBinaryStringsRecur(1,"",n));
+
+              // int[][] qb = new int[2][n+1];
+              // for(int i=0;i<2;i++){
+              // for(int j=0;j<=n;j++){
+              // qb[i][j] = -1;
+              // }
+              // }
+              // System.out.println(countBinaryStringsMemo(1, n, qb));
+
+              // System.out.println(recurSteps+" vs "+memoSteps);
+              // print2DArr(memoMatrix);
+
+              // System.out.println(countBinaryStringsTab(n));
+              String ques = "21123";
+              System.out.println(countEncodingsRecur("", ques));
+
+              System.out.println(countEncodingsMemo("", ques, new int[ques.length() + 1]));
+              System.out.println(recurSteps + " vs " + memoSteps);
+
+              if (memoArr != null) {
+
+                     printArr(memoArr);
+              }
+       }
+
+       public static int maxSumNonAdjacent(int ans, int idx, boolean prev, int[] arr){
+              if(idx==arr.length){
+                     return ans;
+              }
+
+              int a = 0;
+
+              recurSteps++;
+              if(prev==true){
+                     return maxSumNonAdjacent(ans, idx+1, false, arr);
+              }
+              else{
+                     a = Math.max(a,maxSumNonAdjacent(ans+arr[idx], idx + 1, true, arr));
+                     a = Math.max(a,maxSumNonAdjacent(ans, idx + 1, false, arr));
+              }
+
+              return a;
+       }
+
+       public static int maxSumNonAdjacentTab(int[] arr){
+              // Assign storage and meaning
+              int n = arr.length;
+              int[][] dp = new int[n][2];
+
+              dp[0][0] = 0;
+              dp[0][1] = arr[0];
+              // Direction
+              for(int i=1;i<n;i++){
+                     dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1]);
+                     dp[i][1] = dp[i-1][0] + arr[i];
+              }
+
+              return Math.max(dp[n-1][0], dp[n-1][1]);
        }
 
 
+       public static int paintHouse(int n, int[][] costs){
+              // Assign storage and meaning
+              int[][] dp = new int[n][3];
 
+              dp[0][0] = costs[0][0];
+              dp[0][1] = costs[0][1];
+              dp[0][2] = costs[0][2];
 
-       public static void Set4(){
-              int n = 15;
-              System.out.println(countBinaryStringsRecur(1,"",n));
-
-              int[][] qb = new int[2][n+1];
-              for(int i=0;i<2;i++){
-                     for(int j=0;j<=n;j++){
-                            qb[i][j] = -1;
-                     }
+              for(int i=1;i<n;i++){
+                     dp[i][0] = Math.min(dp[i-1][1], dp[i-1][2]) + costs[i][0];
+                     dp[i][1] = Math.min(dp[i-1][0], dp[i-1][2]) + costs[i][1];
+                     dp[i][2] = Math.min(dp[i-1][0], dp[i-1][1]) + costs[i][2];
               }
-              System.out.println(countBinaryStringsMemo(1, n, qb));
 
-              System.out.println(recurSteps+" vs "+memoSteps);
-              print2DArr(memoMatrix);
+              return Math.min(Math.min(dp[n-1][0], dp[n-1][1]), dp[n-1][2]);
 
-              System.out.println(countBinaryStringsTab(n));
+       }
+       public static void Set5() {
+              int[] arr = { 5, 10, 10, 100, 5,6 };
+              int ans = maxSumNonAdjacent(0, 0, false, arr);
+              System.out.println(ans);
+
+              System.out.println("Iterations : " +recurSteps);
+
+              ans = maxSumNonAdjacentTab(arr);
+              System.out.println(ans);
+
        }
 
        public static void main(String[] args) {
@@ -1019,8 +1168,8 @@ public class Main {
               // P&C
               // Set3();
 
-
-              Set4();
+              // Set4();
+              Set5();
 
        }
 }
